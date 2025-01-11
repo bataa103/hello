@@ -28,23 +28,20 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        $user=Auth::user();
-
-        if($user->isAdmin())
-        {
-            return redirect()->route('admin.dashboard');
-        }
-        else{
-            return redirect()->route('dashboard');
-        }
-
-        return redirect()->intended(route('dashboard', absolute: false));
+       return $this->redirectToDashboard(Auth::user());
     }
 
-    public function redirectToDashboard()
+    public function redirectToDashboard($user):RedirectResponse
     {
+
         if ($user->isAdmin()){
             return redirect('admin/dashboard');
+        }
+        elseif ($user->isUser()) {
+            return redirect('user/dashboard');
+        }
+        else{
+            return redirect('dashboard');
         }
     }
 

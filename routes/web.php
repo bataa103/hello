@@ -3,8 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AdminMiddleware;
-use App\Http\Controllers\Admin\IncomeController;
-use App\Http\Controllers\SaveController;
+use App\Http\Middleware\UserMiddleware;
+use App\Http\Controllers\User\CreditController;
 
 
 Route::get('/', function () {
@@ -22,37 +22,24 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', AdminMiddleware::class])->group(function () {
-    Route::get('/admin/dashboard', function () {
+    Route::get('admin/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
+});
 
-    Route::controller(IncomeController::class)->group(function () {
-        Route::get('admin/income', 'index')->name('admin.income.index');
-        Route::get('admin/income/create', 'create')->name('admin.income.create');
-        Route::post('admin/income/store', 'store')->name('admin.income.store');
-        Route::get('admin/income/{id}', 'show')->name('admin.income.show');
-        Route::get('admin/income/{id}/edit', 'edit')->name('admin.income.edit');
-        Route::put('admin/income/{id}', 'update')->name('admin.income.update');
-        Route::delete('admin/income/{id}', 'destroy')->name('admin.income.destroy');
+Route::middleware(['auth', UserMiddleware::class])->prefix('user')->group(function () {
+    Route::get('dashboard', function () {
+        return view('user.dashboard');
+    })->name('user.dashboard');
+
+    Route::controller(CreditController::class)->group(function () {
+        Route::get('credit', 'index')->name('user.credit.index');
+        Route::post('credit', 'store')->name('user.credit.store');
+        // Route::get('credit/{credit}', 'show')->name('user.credit.show');
+        // Route::get('credit/{credit}/edit', 'edit')->name('user.credit.edit');
+        // Route::put('credit/{credit}', 'update')->name('user.credit.update');
+        // Route::delete('credit/{credit}', 'destroy')->name('user.credit.destroy');
     });
 });
 
-
-Route::middleware(['auth', AdminMiddleware::class])->group(function () {
-    Route::prefix('admin')->group(function () {
-        Route::controller(SaveController::class)->group(function () {
-            Route::get('save', 'index')->name('admin.save.index');              // List all saves
-            Route::get('save/create', 'create')->name('admin.save.create');     // Create form
-            Route::post('save', 'store')->name('admin.save.store');             // Store new save
-            Route::get('save/{save}', 'show')->name('admin.save.show');         // View save details
-            Route::get('save/{save}/edit', 'edit')->name('admin.save.edit');    // Edit form
-            Route::put('save/{save}', 'update')->name('admin.save.update');     // Update save
-            Route::delete('save/{save}', 'destroy')->name('admin.save.destroy');// Delete save
-        });
-    });
-});
-
-
-
-
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
