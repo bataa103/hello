@@ -9,14 +9,18 @@ use App\Enum\ExpenseType;
 class Expense extends Model
 {
     protected $fillable = [
-        'id',
-        'bank',
-        'IBAN',
-        'thumbnail',
-        'balance',
+        'type',
+        'amount',
+        'credit_id',
+        'description',
     ];
 
     protected $casts = [
-        'bank' => Bank::class,
+        'type' => ExpenseType::class,
     ];
+
+    public function credit()
+    {
+        return $this->belongsTo(Credit::class);
+    }
 }

@@ -4,48 +4,48 @@ namespace App\Enum;
 
 enum ExpenseType: string
 {
-    // Housing
-    case RENT_MORTGAGE = 'rent_mortgage';
-    case PROPERTY_TAXES = 'property_taxes';
-    case HOME_INSURANCE = 'home_insurance';
+    // Орон сууц
+    case Түрээс_Ипотекийн_Зээл = 'Түрээс/Ипотекийн зээл';
+    case Үл_хөдлөх_хөрөнгийн_татвар = 'Үл хөдлөх хөрөнгийн татвар';
+    case Гэрийн_даатгал = 'Гэрийн даатгал';
 
-    // Utilities
-    case ELECTRICITY = 'electricity';
-    case WATER = 'water';
-    case GAS = 'gas';
-    case INTERNET_PHONE = 'internet_phone';
+    // Гэрийн хэрэглээ
+    case Цахилгаан = 'Цахилгаан';
+    case Ус = 'Ус';
+    case Хий = 'Хий';
+    case Интернет_Утас = 'Интернет/Утас';
 
-    // Transportation
-    case CAR_PAYMENT = 'car_payment';
-    case GASOLINE_FUEL = 'gasoline_fuel';
-    case PUBLIC_TRANSPORTATION = 'public_transportation';
-    case CAR_INSURANCE = 'car_insurance';
+    // Тээвэр
+    case Машины_зээл = 'Машины зээл';
+    case Шатахуун = 'Шатахуун';
+    case Нийтийн_тээвэр = 'Нийтийн тээвэр';
+    case Машины_даатгал = 'Машины даатгал';
 
-    // Food
-    case GROCERIES = 'groceries';
-    case DINING_OUT = 'dining_out';
+    // Хүнс
+    case Хүнсний_бүтээгдэхүүн = 'Хүнсний бүтээгдэхүүн';
+    case Гадуур_хооллох = 'Гадуур хооллох';
 
-    // Healthcare
-    case HEALTH_INSURANCE = 'health_insurance';
-    case DOCTOR_VISITS = 'doctor_visits';
-    case PRESCRIPTIONS = 'prescriptions';
+    // Эрүүл мэнд
+    case Эрүүл_мэндийн_даатгал = 'Эрүүл мэндийн даатгал';
+    case Эмчид_үзүүлэх = 'Эмчид үзүүлэх';
+    case Эмийн_жор = 'Эмийн жор';
 
-    // Personal Care
-    case HAIRCUTS_STYLING = 'haircuts_styling';
-    case TOILETRIES = 'toiletries';
+    // Хувийн арчилгаа
+    case Үсний_засалт_Гоёл = 'Үсний засалт/Гоёл';
+    case Ариун_цэврийн_хэрэгсэл = 'Ариун цэврийн хэрэгсэл';
 
-    // Debt Payments
-    case STUDENT_LOANS = 'student_loans';
-    case CREDIT_CARD_BILLS = 'credit_card_bills';
+    // Өр төлбөр
+    case Оюутны_зээл = 'Оюутны зээл';
+    case Кредит_картын_төлбөр = 'Кредит картын төлбөр';
 
-    // Entertainment
-    case STREAMING_SERVICES = 'streaming_services';
-    case HOBBIES = 'hobbies';
+    // Үзвэр үйлчилгээ
+    case Стрийминг_үйлчилгээ = 'Стрийминг үйлчилгээ';
+    case Хобби = 'Хобби';
 
-    // Clothing
-    case APPAREL = 'apparel';
+    // Хувцас
+    case Хувцас_гутал = 'Хувцас, гутал';
 
-    // Savings
-    case EMERGENCY_FUND = 'emergency_fund';
-    case RETIREMENT_SAVINGS = 'retirement_savings';
+    // Хуримтлал
+    case Яаралтай_тусламжийн_сан = 'Яаралтай тусламжийн сан';
+    case Тэтгэврийн_хуримтлал = 'Тэтгэврийн хуримтлал';
 }

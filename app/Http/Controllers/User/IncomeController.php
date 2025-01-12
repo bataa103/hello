@@ -4,68 +4,66 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Income;
-use Illuminate\Http\Request;
 use App\Models\Credit;
+use Illuminate\Http\Request;
+use App\Enum\IncomeType;
 
-
-class ExpenseController extends Controller
+class IncomeController extends Controller
 {
+
     public function index()
     {
-        $expenses = Expense::all();
+        $incomes = Income::all();
         $credits = Credit::all();
-        return view('user.expense.index', compact('expenses','credits'));
+        return view('user.income.index', compact('incomes', 'credits'));
     }
 
 
     public function store(Request $request)
     {
-
-
         $validatedData = request()->validate([
-            'type' => 'required|string|max:255',
+            'incomeType' => 'required|string|max:255',
             'amount' => 'required|numeric|min:0',
             'description' => 'nullable|string',
             'credit_id' => 'required',
         ]);
 
-
-        Expense::query()->create([
-            'type' => $validatedData['type'],
+        Income::query()->create([
+            'incomeType' => $validatedData['incomeType'],
             'amount' => $validatedData['amount'],
             'description' => $validatedData['description'],
             'credit_id' => $validatedData['credit_id'],
         ]);
 
-        return redirect()->route('user.expense.index')->with('success', 'Expense created successfully!');
+        return redirect()->route('user.income.index')->with('success', 'Income created successfully!');
     }
-
 
 
     public function update(Request $request, $id)
     {
         $validatedData = request()->validate([
-            'type' => 'required|string|max:255',
+            'incomeType' => 'required|string|max:255',
             'amount' => 'required|numeric|min:0',
             'description' => 'nullable|string',
             'credit_id' => 'required',
         ]);
 
-        Expense::query()->findOrFail($id)->update([
-            'type' => $validatedData['type'],
+        Income::query()->findOrFail($id)->update([
+            'incomeType' => $validatedData['incomeType'],
             'amount' => $validatedData['amount'],
             'description' => $validatedData['description'],
-            'credit_id' => $validatedData['credit_id']
+            'credit_id' => $validatedData['credit_id'],
         ]);
-        return redirect()->route('user.expense.index')->with('success', 'Expense updated successfully!');
+
+        return redirect()->route('user.income.index')->with('success', 'Income updated successfully!');
     }
 
+    // Delete an income
     public function destroy($id)
     {
-        $expense = Expense::query()->find($id);
+        $income = Income::findOrFail($id);
+        $income->delete();
 
-        $expense->delete();
-
-        return redirect()->route('user.expense.index')->with('success', 'Expense deleted successfully!');
+        return redirect()->route('user.income.index')->with('success', 'Income deleted successfully!');
     }
 }

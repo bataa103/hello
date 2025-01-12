@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\UserMiddleware;
 use App\Http\Controllers\User\CreditController;
+use App\Http\Controllers\User\ExpenseController;
+use App\Http\Controllers\User\IncomeController;
 
 
 Route::get('/', function () {
@@ -35,10 +37,22 @@ Route::middleware(['auth', UserMiddleware::class])->prefix('user')->group(functi
     Route::controller(CreditController::class)->group(function () {
         Route::get('credit', 'index')->name('user.credit.index');
         Route::post('credit', 'store')->name('user.credit.store');
-        // Route::get('credit/{credit}', 'show')->name('user.credit.show');
-        // Route::get('credit/{credit}/edit', 'edit')->name('user.credit.edit');
-        // Route::put('credit/{credit}', 'update')->name('user.credit.update');
-        // Route::delete('credit/{credit}', 'destroy')->name('user.credit.destroy');
+        Route::put('credit/{id}', 'update')->name('user.credit.update');
+        Route::delete('credit/{id}', 'destroy')->name('user.credit.destroy');
+    });
+
+    Route::controller(ExpenseController::class)->group(function(){
+        Route::get('expense','index')->name('user.expense.index');
+        Route::post('expense', 'store')->name('user.expense.store');
+        Route::put('expense/{id}', 'update')->name('user.expense.update');
+        Route::delete('expense/{id}', 'destroy')->name('user.expense.destroy');
+    });
+
+    Route::controller(IncomeController::class)->group(function(){
+        Route::get('income','index')->name('user.income.index');
+        Route::post('income', 'store')->name('user.income.store');
+        Route::put('income/{id}', 'update')->name('user.income.update');
+        Route::delete('incomee/{id}', 'destroy')->name('user.income.destroy');
     });
 });
 

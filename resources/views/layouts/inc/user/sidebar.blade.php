@@ -32,30 +32,13 @@
                       </li>
 
                       <li class="nav-item">
-                          <a data-bs-toggle="collapse" href="#income-management" class="collapsed"
-                              aria-expanded="false">
-                              <i class="fas fa-dollar-sign"></i>
-                              <p>Орлого</p>
-                              <span class="caret"></span>
-                          </a>
-                          <div class="collapse" id="income-management">
-                              <ul class="nav nav-collapse">
-                                  <li>
-                                      {{-- <a href="{{ route('admin.income.index') }}">
-                                    <span class="sub-item">View All Incomes</span>
-                                </a> --}}
-                                  </li>
-                                  <li>
-                                      {{-- <a href="{{ route('admin.income.create') }}">
-                                    <span class="sub-item">Add New Income</span>
-                                </a> --}}
-                                  </li>
-                              </ul>
-                          </div>
-                      </li>
-
+                        <a href="{{route('user.income.index')}}">
+                            <span class="letter-icon">$</span>
+                            <p>Орлого</p>
+                        </a>
+                    </li>
                       <li class="nav-item">
-                          <a href="components/breadcrumb.html">
+                          <a href="{{route('user.expense.index')}}">
                               <span class="letter-icon">$</span>
                               <p>Зарлага</p>
                           </a>
@@ -67,7 +50,13 @@
                           </a>
                       </li>
                       <li class="nav-item">
-                          <a href="components/buttons.html">
+                          <a href="">
+                              <span class="letter-icon">Bt</span>
+                              <p>Орлогийн төрөл</p>
+                          </a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="">
                               <span class="letter-icon">Bt</span>
                               <p>Зарлагын төрөл</p>
                           </a>

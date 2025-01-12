@@ -4,41 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Enum\IncomeType;
+
 
 class Income extends Model
 {
     use HasFactory;
 
-    protected $table = 'income';
-
     protected $fillable = [
-        'user_id',
-        'source',
+        'incomeType',
         'amount',
-        'date',
+        'credit_id',
         'description',
     ];
 
-    public function user()
+    protected $casts = [
+        'incomeType' => IncomeType::class,
+    ];
+
+    public function credit()
     {
-        return $this->belongsTo(User::class);
-    }
-
-
-    public function getAmountAttribute($value)
-    {
-        return number_format($value, 2);
-    }
-
-
-    public function setAmountAttribute($value)
-    {
-        $this->attributes['amount'] = (float) $value;
-    }
-
-
-    public function scopeForUser($query, $userId)
-    {
-        return $query->where('user_id', $userId);
+        return $this->belongsTo(Credit::class);
     }
 }

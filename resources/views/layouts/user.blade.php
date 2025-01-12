@@ -34,6 +34,7 @@
     <link rel="stylesheet" href="{{asset('admin/assets/css/kaiadmin.min.css')}}" />
     <link href="{{asset('admin/assets/styles.css')}}" rel="stylesheet" />
     <link href="{{asset('admin/assets/prism.css')}}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   </head>
   <body>
     <div class="wrapper">

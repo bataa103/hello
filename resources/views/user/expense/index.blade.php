@@ -5,38 +5,38 @@
         <div class="container-fluid mt-4">
             <div class="card card-documentation">
                 <div class="card-header">
-                    <h4> Орлогын мэдээлэл</h4>
-                    <p>Та энд өөрийн орлогын мэдээллүүддээ удирдах боломжтой.</p>
+                    <h4>Зарлагын мэдээлэл</h4>
+                    <p>Та энд зарлагын мэдээллүүдийг удирдах боломжтой.</p>
                 </div>
                 <div class="card-body">
-                    <!-- Add income Button -->
+                    <!-- Add Expense Button -->
                     <div class="d-flex justify-content-end mb-3">
                         <button class="btn btn-primary btn-round" data-bs-toggle="modal" data-bs-target="#addRowModal">
                             <i class="fa fa-plus"></i> Мөр нэмэх
                         </button>
                     </div>
 
-                    <!-- Мөр нэмэх Modal -->
+                    <!-- Add Expense Modal -->
                     <div class="modal fade" id="addRowModal" tabindex="-1" role="dialog" aria-labelledby="addRowModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header border-0">
                                     <h5 class="modal-title">
                                         <span class="fw-mediumbold">Шинэ</span>
-                                        <span class="fw-light">Орлого</span>
+                                        <span class="fw-light">Зарлага</span>
                                     </h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <p class="small">Энэхүү формоор шинэ орлого нэмнэ үү. Бүх шаардлагатай талбаруудыг бөглөнө үү.</p>
-                                    <form action="{{ route('user.income.store') }}" method="POST" enctype="multipart/form-data">
+                                    <p class="small">Энэхүү формоор шинэ зарлага нэмнэ үү. Бүх шаардлагатай талбаруудыг бөглөнө үү.</p>
+                                    <form action="{{ route('user.expense.store') }}" method="POST" enctype="multipart/form-data">
                                         @csrf
-                                        <!-- Income Type -->
+                                        <!-- Expense Type -->
                                         <div class="form-group">
-                                            <label for="incomeType">Орлогын төрөл</label>
-                                            <select name="incomeType" id="incomeType" class="form-control" required>
-                                                <option value="" disabled selected>Орлогын төрлөө сонгоно уу</option>
-                                                @foreach (\App\Enum\IncomeType::cases() as $type)
+                                            <label for="type">Зардлын төрөл</label>
+                                            <select name="type" id="type" class="form-control" required>
+                                                <option value="" disabled selected>Зардлын төрлөө сонгоно уу</option>
+                                                @foreach (\App\Enum\ExpenseType::cases() as $type)
                                                     <option value="{{ $type->value }}">{{ $type->name }}</option>
                                                 @endforeach
                                             </select>
@@ -86,13 +86,13 @@
                         </div>
                     </div>
 
-                    <!-- Incomes Table -->
+                    <!-- Expenses Table -->
                     <div class="table-responsive">
-                        <table id="incomesTable" class="display table table-striped table-hover">
+                        <table id="expensesTable" class="display table table-striped table-hover">
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Орлогын төрөл</th>
+                                    <th>Зардлын төрөл</th>
                                     <th>Дүн</th>
                                     <th>Тайлбар</th>
                                     <th>Холбогдох данс</th>
@@ -100,10 +100,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($incomes as $item)
+                                @foreach ($expenses as $item)
                                     <tr>
                                         <td>{{ $item->id }}</td>
-                                        <td>{{ $item->incomeType}}</td>
+                                        <td>{{ $item->type }}</td>
                                         <td>{{ number_format($item->amount, 2) }}</td>
                                         <td>{{ $item->description }}</td>
                                         <td>{{ $item->credit->IBAN ?? 'N/A' }}</td>
@@ -117,7 +117,7 @@
                                                 </button>
 
                                                 <!-- Delete Form -->
-                                                <form action="{{ route('user.income.destroy', $item->id) }}" method="POST" class="d-inline-block">
+                                                <form action="{{ route('user.expense.destroy', $item->id) }}" method="POST" class="d-inline-block">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm"
@@ -141,18 +141,18 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form action="{{ route('user.income.update', $item->id) }}" method="POST" enctype="multipart/form-data">
+                                                    <form action="{{ route('user.expense.update', $item->id) }}" method="POST" enctype="multipart/form-data">
                                                         @csrf
                                                         @method('PUT')
 
-                                                        <!-- income Type -->
+                                                        <!-- Expense Type -->
                                                         <div class="form-group">
-                                                            <label for="incomeType">Зардлын төрөл</label>
-                                                            <select id="incomeType" name="incomeType" class="form-control" required>
+                                                            <label for="type">Зардлын төрөл</label>
+                                                            <select name="type" class="form-control" required>
                                                                 <option value="" disabled>Зардлын төрлөө сонгоно уу</option>
-                                                                @foreach (\App\Enum\IncomeType::cases() as $type)
-                                                                    <option value="{{ $type->value }}" {{ $item->incomeType == $type->value ? 'selected' : '' }}>
-                                                                        {{ $type->value }}
+                                                                @foreach (\App\Enum\ExpenseType::cases() as $type)
+                                                                    <option value="{{ $type->value }}" {{ $item->type == $type->value ? 'selected' : '' }}>
+                                                                        {{ $type->name }}
                                                                     </option>
                                                                 @endforeach
                                                             </select>
@@ -217,7 +217,7 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            $('#incomesTable').DataTable({
+            $('#expensesTable').DataTable({
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.11.3/i18n/mn.json" // Mongolian translation if available
                 }

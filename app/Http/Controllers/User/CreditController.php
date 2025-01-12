@@ -19,10 +19,11 @@ class CreditController extends Controller
 
     public function store()
     {
-        $validatedData = $request->validate([
+        $validatedData = request()->validate([
             'bank' => 'required|string|max:255',
             'IBAN' => 'required|numeric',
             'thumbnail' => 'nullable|image',
+            'balance' =>'required|numeric',
         ]);
 
         if(request()->hasFile('thumbnail')){
@@ -37,41 +38,57 @@ class CreditController extends Controller
             $validatedData['thumbnail'] = null;
         }
 
-        Credit::query()-create([
+        Credit::create([
             'bank' => $validatedData['bank'],
             'IBAN' => $validatedData['IBAN'],
             'thumbnail' => $validatedData['thumbnail'],
+            'balance' => $validatedData['balance'],
         ]);
 
         return redirect()->route('user.credit.index')->with('success', 'Credit created successfully!');
     }
 
 
-    // public function edit($id)
-    // {
-    //     $credit = Credit::findOrFail($id);
-    //     return view('user.credit.edit', compact('credit'));
-    // }
+    public function update(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'bank' => 'required|string|max:255',
+            'IBAN' => 'required|numeric',
+            'balance' => 'required|numeric|min:0',
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
+        $credit = Credit::findOrFail($id);
 
-    // public function update(Request $request, $id)
-    // {
-    //     $validatedData = $request->validate([
-    //         'bank' => 'required|string|max:255',
-    //         'thumbnail' => 'nullable|image',
-    //     ]);
+        if ($request->hasFile('thumbnail')) {
+            $file = $request->file('thumbnail');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/user/credit/thumbnail'), $filename);
+            $validatedData['thumbnail'] = 'uploads/user/credit/thumbnail/' . $filename;
 
-    //     $credit = Credit::findOrFail($id);
-    //     $credit->update($validatedData);
+            // Optionally delete the old thumbnail
+            if ($credit->thumbnail && file_exists(public_path($credit->thumbnail))) {
+                unlink(public_path($credit->thumbnail));
+            }
+        }
 
-    //     return redirect()->route('user.credit.index')->with('success', 'Credit updated successfully!');
-    // }
+        $credit->update($validatedData);
 
-    // public function destroy($id)
-    // {
-    //     $credit = Credit::findOrFail($id);
-    //     $credit->delete();
+        return redirect()->route('user.credit.index')->with('success', 'Данс амжилттай шинэчлэгдлээ!');
+    }
 
-    //     return redirect()->route('user.credit.index')->with('success', 'Credit deleted successfully!');
-    // }
+    public function destroy($id)
+    {
+        $credit = Credit::findOrFail($id);
+
+        // Optionally delete the thumbnail file
+        if ($credit->thumbnail && file_exists(public_path($credit->thumbnail))) {
+            unlink(public_path($credit->thumbnail));
+        }
+
+        $credit->delete();
+
+        return redirect()->route('user.credit.index')->with('success', 'Данс амжилттай устгагдлаа!');
+    }
+
 }

@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('saves', function (Blueprint $table) {
+        Schema::create('incomes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->string('title'); // Changed 'source' to 'title' for Save context
+            $table->string('incomeType');
             $table->decimal('amount', 15, 2);
-            $table->date('date');
             $table->text('description')->nullable();
+            $table->foreignId('credit_id')->nullable()->constrained('credits')->ondelete('cascade');
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('saves');
+        Schema::dropIfExists('imcomes');
     }
 };

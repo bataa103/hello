@@ -5,6 +5,7 @@ namespace App\Enum;
 enum Bank: string
 {
     case Khanbank = 'khanbank';
+    case TDB = 'TDB';
     case Golomtbank = 'Golomtbank';
     case Khasbank = 'Khasbank';
     case Statebank = 'Statebank';
