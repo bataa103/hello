@@ -13,14 +13,21 @@ class Expense extends Model
         'amount',
         'credit_id',
         'description',
+        'user_id',
     ];
 
     protected $casts = [
         'type' => ExpenseType::class,
     ];
 
+
     public function credit()
     {
         return $this->belongsTo(Credit::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

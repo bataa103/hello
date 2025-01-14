@@ -16,9 +16,26 @@ class Credit extends Model
         'IBAN',
         'thumbnail',
         'balance',
+        'user_id'
     ];
 
     protected $casts = [
         'bank' => Bank::class,
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(Credit::class);
+    }
+
+    public function incomes()
+    {
+        return $this->hasMany(Income::class);
+    }
+
+    public function expenses()
+    {
+        return $this->hasMany(Expense::class);
+    }
+    
 }
