@@ -7,6 +7,7 @@ use App\Http\Middleware\UserMiddleware;
 use App\Http\Controllers\User\CreditController;
 use App\Http\Controllers\User\ExpenseController;
 use App\Http\Controllers\User\IncomeController;
+use Illuminate\Support\Facades\Auth;
 
 
 Route::get('/', function () {
@@ -29,31 +30,36 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     })->name('admin.dashboard');
 });
 
-Route::middleware(['auth', UserMiddleware::class])->prefix('user')->group(function () {
-    Route::get('dashboard', function () {
-        return view('user.dashboard');
-    })->name('user.dashboard');
+Route::middleware(['auth', UserMiddleware::class])
+    ->prefix('user')
+    ->as('user.')
+    ->group(function () {
 
-    Route::controller(CreditController::class)->group(function () {
-        Route::get('credit', 'index')->name('user.credit.index');
-        Route::post('credit', 'store')->name('user.credit.store');
-        Route::put('credit/{id}', 'update')->name('user.credit.update');
-        Route::delete('credit/{id}', 'destroy')->name('user.credit.destroy');
-    });
+        Route::get('dashboard', function () {
+            $userId = Auth::id();
+            return view('user.dashboard', ['id' => $userId]);
+        })->name('dashboard');
 
-    Route::controller(ExpenseController::class)->group(function(){
-        Route::get('expense','index')->name('user.expense.index');
-        Route::post('expense', 'store')->name('user.expense.store');
-        Route::put('expense/{id}', 'update')->name('user.expense.update');
-        Route::delete('expense/{id}', 'destroy')->name('user.expense.destroy');
-    });
+        Route::controller(CreditController::class)->prefix('credit')->as('credit.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
+            Route::put('/{id}', 'update')->name('update');
+            Route::delete('/{id}', 'destroy')->name('destroy');
+        });
 
-    Route::controller(IncomeController::class)->group(function(){
-        Route::get('income','index')->name('user.income.index');
-        Route::post('income', 'store')->name('user.income.store');
-        Route::put('income/{id}', 'update')->name('user.income.update');
-        Route::delete('incomee/{id}', 'destroy')->name('user.income.destroy');
+        Route::controller(ExpenseController::class)->prefix('expense')->as('expense.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
+            Route::put('/{id}', 'update')->name('update');
+            Route::delete('/{id}', 'destroy')->name('destroy');
+        });
+
+        Route::controller(IncomeController::class)->prefix('income')->as('income.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
+            Route::put('/{id}', 'update')->name('update');
+            Route::delete('/{id}', 'destroy')->name('destroy');
+        });
     });
-});
 
 require __DIR__ . '/auth.php';

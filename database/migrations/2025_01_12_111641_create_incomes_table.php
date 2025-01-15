@@ -17,6 +17,7 @@ return new class extends Migration
             $table->decimal('amount', 15, 2);
             $table->text('description')->nullable();
             $table->foreignId('credit_id')->nullable()->constrained('credits')->ondelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained('users')->ondelete('cascade');
             $table->timestamps();
         });
     }

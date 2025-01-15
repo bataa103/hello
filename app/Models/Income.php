@@ -16,6 +16,7 @@ class Income extends Model
         'amount',
         'credit_id',
         'description',
+        'user_id',
     ];
 
     protected $casts = [
@@ -25,5 +26,10 @@ class Income extends Model
     public function credit()
     {
         return $this->belongsTo(Credit::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
