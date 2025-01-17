@@ -7,6 +7,7 @@ use App\Models\Expense;
 use App\Models\Credit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Enum\ExpenseType;
 
 class ExpenseController extends Controller
 {
@@ -156,4 +157,31 @@ class ExpenseController extends Controller
 
         fclose($file);
     }
+    public function type()
+    {
+        $expenseData = Expense::selectRaw('type, SUM(amount) as total_amount')
+            ->groupBy('type')
+            ->get()
+            ->map(function ($expense) {
+                return [
+                    'type' => $expense->type->value,
+                    'total_amount' => $expense->total_amount,
+                ];
+            });
+
+        $totalExpenses = $expenseData->sum('total_amount');
+
+        $pieChartData = $expenseData->map(function ($expense) use ($totalExpenses) {
+            return [
+                'type' => $expense['type'],
+                'percentage' => ($expense['total_amount'] / $totalExpenses) * 100,
+            ];
+        });
+
+        $barChartData = $expenseData;
+
+        return view('user.expenseType.index', compact('pieChartData', 'barChartData'));
+    }
+
+
 }

@@ -1,98 +1,146 @@
 @extends('layouts.user')
 
 @section('content1')
-
-<h1 class="mt-4">Dashboard</h1>
-<ol class="breadcrumb mb-4">
-    <li class="breadcrumb-item active">Dashboard</li>
-</ol>
-
-
-
-<div class="row">
-    <!-- Charts -->
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">Pie Chart</div>
+    <div class="d-flex">
+        <!-- Үндсэн Агуулга -->
+        <div class="main-content flex-grow-1 p-4">
+            <!-- Кредит Картны Хэсэг -->
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title">Үлдэгдэл</h5>
+                            <p class="card-text text-success">
+                                {{ number_format($creditDetails->sum('balance'), 2) }}.₮
+                            </p>
+                            <p class="card-text text-danger">
+                                {{ number_format($creditDetails->sum('totalExpenses'), 2) }}.₮
+                            </p>
+                            <h6 class="card-subtitle text-muted">Нийт Кредит Карт</h6>
+                        </div>
+                    </div>
+                </div>
+                @foreach ($creditDetails as $credit)
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">{{ $credit['bank'] }}</div>
+                            <div class="card-body">
+                                <p>Нийт Орлого: <span
+                                        class="text-success">{{ number_format($credit['totalIncomes'], 2) }}.₮</span></p>
+                                <p>Нийт Зарлага: <span
+                                        class="text-danger">{{ number_format($credit['totalExpenses'], 2) }}.₮</span></p>
+                                <p>Үлдэгдэл: <span
+                                        class="text-primary">{{ number_format($credit['balance'], 2) }}.₮</span></p>
+                                <div class="progress">
+                                    <div class="progress-bar bg-danger" role="progressbar"
+                                        style="width: {{ $credit['totalExpenses'] / max($credit['totalIncomes'], 1) * 100 }}%;"
+                                        aria-valuenow="{{ $credit['totalExpenses'] / max($credit['totalIncomes'], 1) * 100 }}"
+                                        aria-valuemin="0" aria-valuemax="100">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
             </div>
-            <div class="card-body">
-                <div class="chart-container">
-                    <canvas id="pieChart" style="width: 50%; height: 50%"></canvas>
+
+            <!-- Графикийн Хэсэг -->
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">Сарын Зарлага</div>
+                        <div class="card-body">
+                            <canvas id="barChartMonthlyExpenses"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">Сарын Орлого</div>
+                        <div class="card-body">
+                            <canvas id="barChartMonthlyIncomes"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-xl-6">
-        <div class="card mb-4">
-            <div class="card-header">
-                <i class="fas fa-chart-bar me-1"></i>
-                Bar Chart Example
-            </div>
-            <div class="card-body">
-                <canvas id="myBarChart" width="100%" height="40"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Chart.js Script -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    var myPieChart = new Chart(pieChart, {
-		type: 'pie',
-		data: {
-			datasets: [{
-				data: [50, 35, 15],
-				backgroundColor :["#1d7af3","#f3545d","#fdaf4b"],
-				borderWidth: 0
-			}],
-			labels: ['New Visitors', 'Subscribers', 'Active Users']
-		},
-		options : {
-			responsive: true,
-			maintainAspectRatio: false,
-			legend: {
-				position : 'bottom',
-				labels : {
-					fontColor: 'rgb(154, 154, 154)',
-					fontSize: 11,
-					usePointStyle : true,
-					padding: 20
-				}
-			},
-			pieceLabel: {
-				render: 'percentage',
-				fontColor: 'white',
-				fontSize: 14,
-			},
-			tooltips: false,
-			layout: {
-				padding: {
-					left: 20,
-					right: 20,
-					top: 20,
-					bottom: 20
-				}
-			}
-		}
-	})
+    <!-- Chart.js Скриптүүд -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Сарын Зарлагын График
+            const barExpenseLabels = @json($barExpenseLabels);
+            const barExpenseValues = @json($barExpenseValues);
 
-    // Bar Chart
-    var barChartCtx = document.getElementById('myBarChart').getContext('2d');
-    var barChart = new Chart(barChartCtx, {
-        type: 'bar',
-        data: {
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            datasets: [{
-                label: "Sales",
-                backgroundColor: 'rgb(23, 125, 255)',
-                data: [3, 2, 9, 5, 4, 6, 4, 6, 7, 8, 7, 4],
-            }]
-        },
-        options: { responsive: true }
-    });
+            const barMonthlyExpensesCtx = document.getElementById('barChartMonthlyExpenses').getContext('2d');
+            new Chart(barMonthlyExpensesCtx, {
+                type: 'bar',
+                data: {
+                    labels: barExpenseLabels,
+                    datasets: [{
+                        label: 'Зарлага (MNT)',
+                        data: barExpenseValues,
+                        backgroundColor: '#f3545d',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Зарлага (MNT)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Сарын Өдрүүд'
+                            }
+                        }
+                    }
+                }
+            });
 
-</script>
+            // Сарын Орлогын График
+            const barIncomeLabels = @json($barIncomeLabels);
+            const barIncomeValues = @json($barIncomeValues);
 
+            const barMonthlyIncomesCtx = document.getElementById('barChartMonthlyIncomes').getContext('2d');
+            new Chart(barMonthlyIncomesCtx, {
+                type: 'bar',
+                data: {
+                    labels: barIncomeLabels,
+                    datasets: [{
+                        label: 'Орлого (MNT)',
+                        data: barIncomeValues,
+                        backgroundColor: '#4caf50',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Орлого (MNT)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Сарын Өдрүүд'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 @endsection

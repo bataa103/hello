@@ -50,14 +50,14 @@
                           </a>
                       </li>
                       <li class="nav-item">
-                          <a href="">
+                          <a href="{{ route('user.income.type') }}">
                               <i class="bi bi-list-columns"></i>
                               <p>Орлогын төрөл</p>
                           </a>
 
                       </li>
                       <li class="nav-item">
-                          <a href="">
+                          <a href="{{ route('user.expense.type') }}">
                               <i class="bi bi-receipt"></i>
                               <p>Зарлагын төрөл</p>
                           </a>

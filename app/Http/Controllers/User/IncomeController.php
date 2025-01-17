@@ -8,7 +8,7 @@ use App\Models\Credit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Enums\IncomeType;
+use App\Enum\IncomeType;
 
 
 class IncomeController extends Controller
@@ -159,19 +159,34 @@ class IncomeController extends Controller
 
         fclose($file);
     }
-    public function showIncomeTypes()
+    public function type()
     {
         $incomeData = Income::selectRaw('incomeType, SUM(amount) as total_amount')
             ->groupBy('incomeType')
             ->get()
             ->map(function ($income) {
                 return [
-                    'type' => IncomeType::from($income->incomeType)->value,
+                    'type' => $income->incomeType->value, // Enum value (e.g., "Salary", "Business")
                     'total_amount' => $income->total_amount,
                 ];
             });
 
-        return view('income.type', compact('incomeData'));
+        // Calculate the total income for percentage calculations
+        $totalIncome = $incomeData->sum('total_amount');
+
+        // Prepare data for the charts
+        $pieChartData = $incomeData->map(function ($income) use ($totalIncome) {
+            return [
+                'type' => $income['type'],
+                'percentage' => ($income['total_amount'] / $totalIncome) * 100,
+            ];
+        });
+
+        $barChartData = $incomeData;
+
+        return view('user.incomeType.index', compact('pieChartData', 'barChartData'));
     }
+
+
 
 }

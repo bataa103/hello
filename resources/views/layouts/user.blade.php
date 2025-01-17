@@ -52,35 +52,8 @@
   <script src="{{asset('admin/assets/js/core/bootstrap.min.js')}}"></script>
   <script src="{{asset('admin/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')}}"></script>
   <script src="{{asset('admin/assets/js/plugin/datatables/datatables.min.js')}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <script type="text/javascript">
-    // Optional
-    Prism.plugins.NormalizeWhitespace.setDefaults({
-      "remove-trailing": true,
-      "remove-indent": true,
-      "left-trim": true,
-      "right-trim": true,
-    });
+  
 
-    // handle links with @href started with '#' only
-    $(document).on("click", 'a[href^="#"]', function (e) {
-      // target element id
-      var id = $(this).attr("href");
-
-      // target element
-      var $id = $(id);
-      if ($id.length === 0) {
-        return;
-      }
-
-      // prevent standard hash navigation (avoid blinking in IE)
-      e.preventDefault();
-
-      // top position relative to the document
-      var pos = $id.offset().top - 80;
-
-      // animated top scrolling
-      $("body, html").animate({ scrollTop: pos });
-    });
-  </script>
 </html>

@@ -100,4 +100,5 @@ class CreditController extends Controller
         return redirect()->route('user.credit.index')->with('success', 'Credit deleted successfully!');
     }
 
+
 }
