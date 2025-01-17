@@ -26,7 +26,7 @@
                 <!-- Remember Me -->
                 <div class="flex items-center mb-4">
                     <label for="remember_me" class="inline-flex items-center text-sm text-gray-700">
-                        <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
+                        <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-blue-900 shadow-sm focus:ring-indigo-500" name="remember">
                         <span class="ml-2">{{ __('Намайг сана') }}</span>
                     </label>
                 </div>
@@ -34,12 +34,12 @@
                 <!-- Forgot Password & Submit Button -->
                 <div class="flex items-center justify-between">
                     @if (Route::has('password.request'))
-                        <a class="text-sm text-indigo-600 hover:text-indigo-800 underline focus:outline-none focus:ring-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
+                        <a class="text-sm text-black hover:text-indigo-800 underline focus:outline-none focus:ring-2 focus:ring-blue-900" href="{{ route('password.request') }}">
                             {{ __('Нууц үгээ мартсан уу?') }}
                         </a>
                     @endif
 
-                    <x-primary-button class="ml-3 px-6 py-2 text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 rounded-lg">
+                    <x-primary-button class="ml-3 px-6 py-2 text-white bg-blue-900 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 rounded-lg">
                         {{ __('Нэвтрэх') }}
                     </x-primary-button>
                 </div>

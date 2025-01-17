@@ -10,6 +10,7 @@ use App\Http\Controllers\User\IncomeController;
 use Illuminate\Support\Facades\Auth;
 
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -52,6 +53,7 @@ Route::middleware(['auth', UserMiddleware::class])
             Route::post('/', 'store')->name('store');
             Route::put('/{id}', 'update')->name('update');
             Route::delete('/{id}', 'destroy')->name('destroy');
+            Route::post('/import-transactions', 'importCsv')->name('import.transactions');
         });
 
         Route::controller(IncomeController::class)->prefix('income')->as('income.')->group(function () {
@@ -59,7 +61,14 @@ Route::middleware(['auth', UserMiddleware::class])
             Route::post('/', 'store')->name('store');
             Route::put('/{id}', 'update')->name('update');
             Route::delete('/{id}', 'destroy')->name('destroy');
+            Route::post('/import-transactions', 'importCsv')->name('import.transactions');
+            Route::get('/income/type', [IncomeController::class, 'showIncomeTypes'])->name('income.type');
+            Route::get('/type', 'showIncomeTypes')->name('type.index'); // Moved here to avoid duplication
         });
+        Route::get('/user-dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
+
+
+
     });
 
 require __DIR__ . '/auth.php';

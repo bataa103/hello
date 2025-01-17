@@ -55,14 +55,7 @@
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                        <div class="form-group">
-                                            <label for="balance">Дансны үлдэгдэл</label>
-                                            <input type="number" name="balance" class="form-control" id="balance"
-                                                required>
-                                            @error('balance')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
+
                                         <div class="form-group">
                                             <label for="thumbnail">Зураг</label>
                                             <input type="file" name="thumbnail" id="thumbnail" class="form-control">
@@ -89,7 +82,6 @@
                                     <th>Зураг</th>
                                     <th>Банкны нэр</th>
                                     <th>Дансны дугаар</th>
-                                    <th>Дансны үлдэгдэл</th>
                                     <th>Үйлдэл</th>
                                 </tr>
                             </thead>
@@ -115,7 +107,6 @@
                                             {{ $bankName }}
                                         </td>
                                         <td>{{ $credit->IBAN }}</td>
-                                        <td>{{ $credit->balance }}</td>
                                         <td class="editDelete">
                                             <div class="d-flex justify-between">
                                                 <!-- Edit Button -->
@@ -179,14 +170,6 @@
                                                             <input type="number" name="IBAN" class="form-control"
                                                                 id="IBAN" value="{{ $credit->IBAN }}" required>
                                                             @error('IBAN')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="balance">Дансны үлдэгдэл</label>
-                                                            <input type="number" name="balance" class="form-control"
-                                                                id="balance" value="{{ $credit->balance }}" required>
-                                                            @error('balance')
                                                                 <span class="text-danger">{{ $message }}</span>
                                                             @enderror
                                                         </div>

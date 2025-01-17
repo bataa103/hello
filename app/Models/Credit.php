@@ -15,7 +15,6 @@ class Credit extends Model
         'bank',
         'IBAN',
         'thumbnail',
-        'balance',
         'user_id'
     ];
 
@@ -37,5 +36,5 @@ class Credit extends Model
     {
         return $this->hasMany(Expense::class);
     }
-    
+
 }

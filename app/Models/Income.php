@@ -16,6 +16,7 @@ class Income extends Model
         'amount',
         'credit_id',
         'description',
+        'date',
         'user_id',
     ];
 

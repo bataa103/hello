@@ -32,8 +32,6 @@
     <link rel="stylesheet" href="{{asset('admin/assets/css/bootstrap.min.css')}}" />
     <link rel="stylesheet" href="{{asset('admin/assets/css/plugins.min.css')}}" />
     <link rel="stylesheet" href="{{asset('admin/assets/css/kaiadmin.min.css')}}" />
-    <link href="{{asset('admin/assets/styles.css')}}" rel="stylesheet" />
-    <link href="{{asset('admin/assets/prism.css')}}" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   </head>
   <body>
@@ -54,9 +52,7 @@
   <script src="{{asset('admin/assets/js/core/bootstrap.min.js')}}"></script>
   <script src="{{asset('admin/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')}}"></script>
   <script src="{{asset('admin/assets/js/plugin/datatables/datatables.min.js')}}"></script>
-  <script src="{{asset('admin/assets/js/kaiadmin.min.js')}}"></script>
-  <script src="{{asset('admin/assets/prism.js')}}"></script>
-  <script src="{{asset('admin/assets/prism-normalize-whitespace.min.js')}}"></script>
+
   <script type="text/javascript">
     // Optional
     Prism.plugins.NormalizeWhitespace.setDefaults({

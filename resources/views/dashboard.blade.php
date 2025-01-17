@@ -14,4 +14,26 @@
             </div>
         </div>
     </div>
+    @extends('layouts.app') <!-- Extend your layout -->
+
+@section('content')
+<div class="container">
+    <div class="row">
+        <h1>User Dashboard</h1>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <canvas id="lineChart"></canvas>
+        </div>
+        <div class="col-md-6">
+            <canvas id="barChart"></canvas>
+        </div>
+    </div>
+</div>
+
+
+@endsection
+
+
 </x-app-layout>
