@@ -8,6 +8,7 @@ use App\Http\Controllers\User\CreditController;
 use App\Http\Controllers\User\ExpenseController;
 use App\Http\Controllers\User\IncomeController;
 use App\Http\Controllers\User\DashboardController;
+use App\Http\Controllers\Admin\PlanController;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -26,11 +27,24 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth', AdminMiddleware::class])->group(function () {
-    Route::get('admin/dashboard', function () {
+
+Route::middleware([AdminMiddleware::class])->prefix('admin')
+->name('admin.')
+->group(function () {
+    Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
+
+    Route::controller(PlanController::class)->prefix('plan')->name('plan.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::put('/{id}', 'update')->name('update');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+    });
+    Route::get('/messages', [AdminMessageController::class, 'index'])->name('messages.index');
 });
+
+
 
 Route::middleware(['auth', UserMiddleware::class])
     ->prefix('user')
@@ -65,7 +79,9 @@ Route::middleware(['auth', UserMiddleware::class])
             Route::delete('/{id}', 'destroy')->name('destroy'); // Delete income
             Route::get('/type', 'type')->name('type'); // Income Type Chart
             Route::post('/import-transactions', 'importCsv')->name('import.transactions');
+            Route::get('/income/total', [IncomeController::class, 'getIncomeByDate'])->name('income.total');
         });
+        Route::post('/messages', [UserMessageController::class, 'store'])->name('messages.store');
     });
 
 

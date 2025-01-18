@@ -194,20 +194,26 @@ c
             </div>
 
             <!-- Right Section -->
-            <div>
+            {{-- <form action="{{ route('messages.store') }}" method="POST"> --}}
+                @csrf
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <input type="text" placeholder="Нэр"
+                    <input type="text" name="name" placeholder="Нэр" aria-label="Name"
                         class="bg-gray-800 border border-gray-700 text-white px-5 py-3 rounded-lg w-full focus:ring-2 focus:ring-yellow-500 transition duration-300" />
-                    <input type="email" placeholder="И-мэйл хаяг бичих"
+                    <input type="email" name="email" placeholder="И-мэйл хаяг бичих" aria-label="Email"
                         class="bg-gray-800 border border-gray-700 text-white px-5 py-3 rounded-lg w-full focus:ring-2 focus:ring-yellow-500 transition duration-300" />
                 </div>
-                <textarea placeholder="Энд мессежээ бичнэ үү..."
+                <textarea name="message" placeholder="Энд мессежээ бичнэ үү..." aria-label="Message"
                     class="bg-gray-800 border border-gray-700 text-white px-5 py-3 rounded-lg w-full h-32 resize-none mt-4 focus:ring-2 focus:ring-yellow-500 transition duration-300"></textarea>
                 <button
-                    class="w-full bg-yellow-500 text-gray-900 font-medium px-8 py-3 rounded-lg hover:bg-yellow-600 transition duration-300 mt-4">
+                    type="submit"
+                    class="w-full bg-yellow-500 text-gray-900 font-medium px-8 py-3 rounded-lg hover:bg-yellow-600 transition duration-300 mt-4"
+                    onclick="this.disabled = true; this.innerText = 'Sending...'; this.form.submit();">
                     Илгээх
                 </button>
-            </div>
+            </form>
+
+
+
 
             <!-- Social Media -->
             <div class="col-span-1 md:col-span-2 flex justify-center space-x-6 mt-6">

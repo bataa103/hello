@@ -20,8 +20,29 @@
                         </div>
                     </div>
                 </div>
+                @section('content1')
+    <div class="d-flex">
+        <div class="main-content flex-grow-1 p-4">
+            <!-- Dropdown Menu to Choose Bank -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label for="bankSelector" class="form-label">Банк сонгох</label>
+                    <div class="input-group">
+                        <select id="bankSelector" class="form-select">
+                            <option value="">Бүх банк</option>
+                            @foreach ($creditDetails as $credit)
+                                <option value="{{ $credit['bank'] }}">{{ $credit['bank'] }}</option>
+                            @endforeach
+                        </select>
+                        <button id="showBankButton" class="btn btn-primary">Харах</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Credit Card Details Section -->
+            <div id="bankDetails" class="row">
                 @foreach ($creditDetails as $credit)
-                    <div class="col-md-6">
+                    <div class="col-md-4 bank-card" data-bank="{{ $credit['bank'] }}" style="display: none;">
                         <div class="card">
                             <div class="card-header">{{ $credit['bank'] }}</div>
                             <div class="card-body">
@@ -43,6 +64,8 @@
                     </div>
                 @endforeach
             </div>
+        </div>
+    </div>
 
             <!-- Графикийн Хэсэг -->
             <div class="row mt-4">
@@ -140,6 +163,27 @@
                         }
                     }
                 }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const bankSelector = document.getElementById('bankSelector');
+            const showBankButton = document.getElementById('showBankButton');
+            const bankCards = document.querySelectorAll('.bank-card');
+
+            showBankButton.addEventListener('click', function () {
+                const selectedBank = bankSelector.value;
+
+                bankCards.forEach(card => {
+                    const cardBank = card.dataset.bank;
+
+                    if (selectedBank === "" || cardBank === selectedBank) {
+                        card.style.display = "block";
+                    } else {
+                        card.style.display = "none";
+                    }
+                });
             });
         });
     </script>

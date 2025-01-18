@@ -12,7 +12,7 @@
                     <!-- Add Income Button -->
                     <div class="d-flex justify-content-end mb-3">
                         <button class="btn btn-primary btn-round me-2" data-bs-toggle="modal" data-bs-target="#addRowModal">
-                            <i class="fa fa-plus"></i> Мөр нэмэх
+                            <i class="fa fa-plus"></i> Орлого нэмэх
                         </button>
                         <button class="btn btn-secondary btn-round" data-bs-toggle="modal"
                             data-bs-target="#uploadExcelModal">
@@ -20,7 +20,7 @@
                         </button>
                     </div>
 
-                    <!-- Мөр нэмэх Modal -->
+                    <!-- Орлого нэмэх Modal -->
                     <div class="modal fade" id="addRowModal" tabindex="-1" role="dialog"
                         aria-labelledby="addRowModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
@@ -135,33 +135,40 @@
                         </div>
                     </div>
 
-            <div class="row">
-                <div class="col-12 col-sm-6 col-md-6 col-xl-3">
-                  <div class="card">
-                    <div class="card-body">
-                      <div class="d-flex justify-content-between">
-                        <div>
-                          <h5><b>Өнөөдрийн орлого</b></h5>
-                          <p class="text-muted">All Customs Value</p>
+                    <div class="row">
+                        <div class="col-span-12 md:col-span-6 xl:col-span-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <!-- Header with selected date and total income -->
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <h5 id="selected-date" class="font-bold">Өнөөдрийн орлого</h5>
+                                            <p class="text-gray-500">All Customs Value</p>
+                                        </div>
+                                        <h3 id="total-income" class="text-blue-600 font-bold">0₮</h3>
+                                    </div>
+
+                                    <!-- Date Picker -->
+                                    <div class="mt-4">
+                                        <input type="date" id="income-date" class="w-full p-2 border border-gray-300 rounded-md">
+                                    </div>
+
+                                    <!-- Progress Bar -->
+                                    <div class="progress mt-4 h-2 bg-gray-200 rounded">
+                                        <div id="progress-bar" class="bg-blue-600 h-full rounded" style="width: 0%"></div>
+                                    </div>
+
+                                    <!-- Progress Info -->
+                                    <div class="flex justify-between mt-2 text-sm text-gray-500">
+                                        <p>Change</p>
+                                        <p id="progress-percentage">0%</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <h3 class="text-info fw-bold">170.000₮</h3>
-                      </div>
-                      <div class="progress progress-sm">
-                        <div
-                          class="progress-bar bg-info w-75"
-                          role="progressbar"
-                          aria-valuenow="75"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                        ></div>
-                      </div>
-                      <div class="d-flex justify-content-between mt-2">
-                        <p class="text-muted mb-0">Change</p>
-                        <p class="text-muted mb-0">75%</p>
-                      </div>
                     </div>
-                  </div>
-                </div>
+
+
 
                 <div class="row">
                     <!-- Charts -->
@@ -391,4 +398,36 @@
             }
         }
     </script>
+    <script>
+        document.getElementById('income-date').addEventListener('change', function () {
+            const selectedDate = this.value;
+
+            // Format selected date
+            const formattedDate = new Date(selectedDate).toLocaleDateString('mn-MN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            document.getElementById('selected-date').textContent = `Орлого (${formattedDate})`;
+
+            // Fetch income data from the backend
+            fetch(`/income/total?date=${selectedDate}`)
+                .then(response => response.json())
+                .then(data => {
+                    const totalIncome = data.totalIncome || 0;
+
+                    // Update income display
+                    document.getElementById('total-income').textContent = `${totalIncome}₮`;
+
+                    // Update progress bar (Assume target income is 100,000₮ for demonstration)
+                    const targetIncome = 100000;
+                    const percentage = Math.min((totalIncome / targetIncome) * 100, 100);
+                    document.getElementById('progress-bar').style.width = `${percentage}%`;
+                    document.getElementById('progress-percentage').textContent = `${Math.round(percentage)}%`;
+                })
+                .catch(error => console.error('Error fetching income data:', error));
+        });
+    </script>
+
+
 @endsection

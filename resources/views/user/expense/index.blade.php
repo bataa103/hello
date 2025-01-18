@@ -12,7 +12,7 @@
                     <!-- Add Expense Button -->
                     <div class="d-flex justify-content-end mb-3">
                         <button class="btn btn-primary btn-round me-2" data-bs-toggle="modal" data-bs-target="#addRowModal">
-                            <i class="fa fa-plus"></i> Мөр нэмэх
+                            <i class="fa fa-plus"></i>Зарлага нэмэх
                         </button>
                         <button class="btn btn-secondary btn-round" data-bs-toggle="modal" data-bs-target="#uploadExcelModal">
                             <i class="fa fa-file-excel"></i> Excel-ээр нэмэх

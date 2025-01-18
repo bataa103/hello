@@ -5,13 +5,13 @@
     <div class="container-fluid mt-4">
         <div class="card card-documentation">
             <div class="card-header">
-                <h4>Орлогын төрлйин мэдээлэл</h4>
-                <p>Та энд өөрийн орлогын төрлйин мэдээллүүддээ харах боломжтой.</p>
+                <h4>Орлогын төрлийн мэдээлэл</h4>
+                <p>Та энд өөрийн орлогын төрлийн мэдээллүүддээ харах боломжтой.</p>
             </div>
             <div class="card-body">
                 <div class="row">
                     <!-- Pie Chart -->
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <div class="card">
                             <div class="card-header">
                                 <div class="card-title">Pie Chart (Percentage)</div>
@@ -24,7 +24,7 @@
                         </div>
                     </div>
                     <!-- Bar Chart -->
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                         <div class="card">
                             <div class="card-header">
                                 <div class="card-title">Bar Chart (Amount)</div>

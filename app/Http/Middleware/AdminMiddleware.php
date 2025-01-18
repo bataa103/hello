@@ -6,6 +6,9 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Admin\MessageController;
+use App\Http\Controllers\Admin\PlanController;
+
 
 
 class AdminMiddleware

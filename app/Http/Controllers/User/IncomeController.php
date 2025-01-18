@@ -186,6 +186,17 @@ class IncomeController extends Controller
 
         return view('user.incomeType.index', compact('pieChartData', 'barChartData'));
     }
+    public function getIncomeByDate(Request $request)
+{
+    $date = $request->input('date');
+    $totalIncome = Income::whereDate('date', $date)->sum('amount');
+
+    return response()->json([
+        'date' => $date,
+        'totalIncome' => $totalIncome,
+    ]);
+}
+
 
 
 
