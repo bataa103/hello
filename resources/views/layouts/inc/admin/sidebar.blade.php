@@ -3,21 +3,21 @@
     <div class="sidebar-logo">
         <!-- Logo Header -->
         <div class="logo-header" data-background-color="white">
-            <a href="{{ route('admin.dashboard') }}" class="logo">
-                <img src="assets/img/kaiadmin/logo_dark.svg" alt="navbar brand" class="navbar-brand" height="20" />
+            <img src="{{ asset('admin/assets/image/brandlogo.svg') }}" alt="navbar brand"
+                class=" rounded-lg border border-navbar-brand" height="70px" />
             </a>
             <div class="nav-toggle">
                 <button class="btn btn-toggle toggle-sidebar">
-                    <i class="gg-menu-right"></i>
+                  <i class="gg-menu-right"></i>
                 </button>
                 <button class="btn btn-toggle sidenav-toggler">
-                    <i class="gg-menu-left"></i>
+                  <i class="gg-menu-left"></i>
                 </button>
-            </div>
-            <button class="topbar-toggler more">
+              </div>
+              <button class="topbar-toggler more">
                 <i class="gg-more-vertical-alt"></i>
-            </button>
-        </div>
+              </button>
+            </div>
         <!-- End Logo Header -->
     </div>
     <div class="sidebar-wrapper scrollbar scrollbar-inner">
@@ -47,12 +47,12 @@
                     <div class="collapse" id="user-control">
                         <ul class="nav nav-collapse">
                             <li>
-                                <a href="">
+                                <a href="{{ route('admin.users.index') }}">
                                     <span class="sub-item">View All Users</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="">
+                                <a href="{{ route('admin.users.create') }}">
                                     <span class="sub-item">Add New User</span>
                                 </a>
                             </li>

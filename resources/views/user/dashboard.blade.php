@@ -1,31 +1,29 @@
 @extends('layouts.user')
 
 @section('content1')
-    <div class="d-flex">
-        <!-- Үндсэн Агуулга -->
-        <div class="main-content flex-grow-1 p-4">
-            <!-- Кредит Картны Хэсэг -->
-            <div class="row mt-4">
-                <div class="col-md-6">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <h5 class="card-title">Үлдэгдэл</h5>
-                            <p class="card-text text-success">
-                                {{ number_format($creditDetails->sum('balance'), 2) }}.₮
-                            </p>
-                            <p class="card-text text-danger">
-                                {{ number_format($creditDetails->sum('totalExpenses'), 2) }}.₮
-                            </p>
-                            <h6 class="card-subtitle text-muted">Нийт Кредит Карт</h6>
-                        </div>
+<div class="d-flex">
+    <!-- Үндсэн Агуулга -->
+    <div class="main-content flex-grow-1 p-4">
+        <!-- Кредит Картны Хэсэг -->
+        <div class="row align-items-center">
+            <!-- Үлдэгдэл Card -->
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Үлдэгдэл</h5>
+                        <p class="card-text text-success">
+                            {{ number_format($creditDetails->sum('balance'), 2) }}.₮
+                        </p>
+                        <p class="card-text text-danger">
+                            {{ number_format($creditDetails->sum('totalExpenses'), 2) }}.₮
+                        </p>
+                        <h6 class="card-subtitle text-muted">Нийт Кредит Карт</h6>
                     </div>
                 </div>
-                @section('content1')
-    <div class="d-flex">
-        <div class="main-content flex-grow-1 p-4">
+            </div>
             <!-- Dropdown Menu to Choose Bank -->
-            <div class="row mb-4">
-                <div class="col-md-6">
+            <div class="col-md-8">
+                <div class="mb-4">
                     <label for="bankSelector" class="form-label">Банк сонгох</label>
                     <div class="input-group">
                         <select id="bankSelector" class="form-select">
@@ -38,6 +36,11 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+
 
             <!-- Credit Card Details Section -->
             <div id="bankDetails" class="row">
@@ -68,7 +71,7 @@
     </div>
 
             <!-- Графикийн Хэсэг -->
-            <div class="row mt-4">
+            <div class="row mt-2">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">Сарын Зарлага</div>
@@ -78,7 +81,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row mt-4">
+            <div class="row mt-1">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">Сарын Орлого</div>
@@ -90,7 +93,7 @@
             </div>
         </div>
     </div>
-
+    
     <!-- Chart.js Скриптүүд -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>

@@ -86,5 +86,13 @@
       // animated top scrolling
       $("body, html").animate({ scrollTop: pos });
     });
+    document.querySelector('.toggle-sidebar').addEventListener('click', function () {
+  document.querySelector('.sidebar').classList.toggle('hidden'); // Hide/show sidebar
+});
+
+document.querySelector('.sidenav-toggler').addEventListener('click', function () {
+  document.querySelector('.sidebar').classList.toggle('collapsed'); // Collapse sidebar
+});
+
   </script>
 </html>

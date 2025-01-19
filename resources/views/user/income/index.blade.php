@@ -135,67 +135,18 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-span-12 md:col-span-6 xl:col-span-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <!-- Header with selected date and total income -->
-                                    <div class="flex justify-between items-center">
-                                        <div>
-                                            <h5 id="selected-date" class="font-bold">Өнөөдрийн орлого</h5>
-                                            <p class="text-gray-500">All Customs Value</p>
-                                        </div>
-                                        <h3 id="total-income" class="text-blue-600 font-bold">0₮</h3>
-                                    </div>
-
-                                    <!-- Date Picker -->
-                                    <div class="mt-4">
-                                        <input type="date" id="income-date" class="w-full p-2 border border-gray-300 rounded-md">
-                                    </div>
-
-                                    <!-- Progress Bar -->
-                                    <div class="progress mt-4 h-2 bg-gray-200 rounded">
-                                        <div id="progress-bar" class="bg-blue-600 h-full rounded" style="width: 0%"></div>
-                                    </div>
-
-                                    <!-- Progress Info -->
-                                    <div class="flex justify-between mt-2 text-sm text-gray-500">
-                                        <p>Change</p>
-                                        <p id="progress-percentage">0%</p>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="mt-4">
+                        <!-- Date Picker and Apply Button -->
+                        <div class="d-flex align-items-center">
+                            <input type="date" id="income-date" class="form-control w-auto me-2">
+                            <button id="apply-date" class="btn btn-primary">Apply</button>
                         </div>
+
+                        <!-- Display Selected Date and Total Income -->
+                        <h5 id="selected-date" class="font-bold mt-3">Selected Date:</h5>
+                        <h3 id="total-income" class="text-blue-600 font-bold"></h3>
                     </div>
 
-
-
-                <div class="row">
-                    <!-- Charts -->
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="card-title">Pie Chart</div>
-                            </div>
-                            <div class="card-body">
-                                <div class="chart-container">
-                                    <canvas id="pieChart" style="width: 50%; height: 50%"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6">
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-chart-bar me-1"></i>
-                                Bar Chart Example
-                            </div>
-                            <div class="card-body">
-                                <canvas id="myBarChart" width="100%" height="40"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                     <!-- Incomes Table -->
                     <div class="table-responsive">
                         <table id="incomesTable" class="display table table-striped table-hover">
@@ -316,118 +267,142 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    var myPieChart = new Chart(pieChart, {
-		type: 'pie',
-		data: {
-			datasets: [{
-				data: [50, 35, 15],
-				backgroundColor :["#1d7af3","#f3545d","#fdaf4b"],
-				borderWidth: 0
-			}],
-			labels: ['New Visitors', 'Subscribers', 'Active Users']
-		},
-		options : {
-			responsive: true,
-			maintainAspectRatio: false,
-			legend: {
-				position : 'bottom',
-				labels : {
-					fontColor: 'rgb(154, 154, 154)',
-					fontSize: 11,
-					usePointStyle : true,
-					padding: 20
-				}
-			},
-			pieceLabel: {
-				render: 'percentage',
-				fontColor: 'white',
-				fontSize: 14,
-			},
-			tooltips: false,
-			layout: {
-				padding: {
-					left: 20,
-					right: 20,
-					top: 20,
-					bottom: 20
-				}
-			}
-		}
-	})
 
-    // Bar Chart
-    var barChartCtx = document.getElementById('myBarChart').getContext('2d');
-    var barChart = new Chart(barChartCtx, {
-        type: 'bar',
-        data: {
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            datasets: [{
-                label: "Sales",
-                backgroundColor: 'rgb(23, 125, 255)',
-                data: [3, 2, 9, 5, 4, 6, 4, 6, 7, 8, 7, 4],
-            }]
-        },
-        options: { responsive: true }
-    });
-
-
-</script>
 
 @endsection
 
 @section('scripts')
-    <script>
-        $(document).ready(function() {
-            $('#incomesTable').DataTable({
-                language: {
-                    url: "//cdn.datatables.net/plug-ins/1.11.3/i18n/mn.json"
-                }
-            });
-        });
-    </script>
-    <script>
-        function formatNumberNoDecimals(input) {
-            // Remove any existing commas
-            let value = input.value.replace(/,/g, '');
 
-            // Ensure it's a valid number
-            if (!isNaN(value) && value !== '') {
-                // Format the number with commas, no decimals
-                input.value = parseInt(value, 10).toLocaleString('en-US');
+
+
+<script>
+document.getElementById('apply-date').addEventListener('click', function () {
+    const selectedDate = document.getElementById('income-date').value;
+
+    if (!selectedDate) {
+        alert('Please select a date!');
+        return;
+    }
+
+    fetch(`/income/date?date=${selectedDate}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.error(data.error);
+                return;
             }
-        }
-    </script>
-    <script>
-        document.getElementById('income-date').addEventListener('change', function () {
-            const selectedDate = this.value;
 
-            // Format selected date
+            // Format the total income
+            const totalIncome = data.totalIncome || 0;
+            const formattedIncome = new Intl.NumberFormat('mn-MN').format(totalIncome);
+
+            // Update total income and selected date
+            document.getElementById('total-income').textContent = `${formattedIncome}₮`;
+
             const formattedDate = new Date(selectedDate).toLocaleDateString('mn-MN', {
                 year: 'numeric',
                 month: 'long',
-                day: 'numeric'
+                day: 'numeric',
             });
-            document.getElementById('selected-date').textContent = `Орлого (${formattedDate})`;
-
-            // Fetch income data from the backend
-            fetch(`/income/total?date=${selectedDate}`)
-                .then(response => response.json())
-                .then(data => {
-                    const totalIncome = data.totalIncome || 0;
-
-                    // Update income display
-                    document.getElementById('total-income').textContent = `${totalIncome}₮`;
-
-                    // Update progress bar (Assume target income is 100,000₮ for demonstration)
-                    const targetIncome = 100000;
-                    const percentage = Math.min((totalIncome / targetIncome) * 100, 100);
-                    document.getElementById('progress-bar').style.width = `${percentage}%`;
-                    document.getElementById('progress-percentage').textContent = `${Math.round(percentage)}%`;
-                })
-                .catch(error => console.error('Error fetching income data:', error));
+            document.getElementById('selected-date').textContent = `Selected Date: ${formattedDate}`;
+        })
+        .catch(error => {
+            console.error('Error fetching income data:', error);
         });
-    </script>
+});
+
+// sss
+    document.getElementById('income-date').addEventListener('change', function () {
+    const selectedDate = this.value;
+
+    fetch(`/income/date?date=${selectedDate}`)
+        .then(response => response.json())
+        .then(data => {
+            const totalIncome = data.totalIncome || 0;
+
+            // Update chart
+            incomeChart.data.datasets[0].data = [totalIncome];
+            incomeChart.update();
+        })
+        .catch(error => {
+            console.error('Error updating chart:', error);
+        });
+});
+
+
+</script>
 
 
 @endsection
+{{-- <script>
+    $(document).ready(function() {
+        $('#incomesTable').DataTable({
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.11.3/i18n/mn.json"
+            }
+        });
+    });
+</script>
+<script>
+    function formatNumberNoDecimals(input) {
+        // Remove any existing commas
+        let value = input.value.replace(/,/g, '');
+
+        // Ensure it's a valid number
+        if (!isNaN(value) && value !== '') {
+            // Format the number with commas, no decimals
+            input.value = parseInt(value, 10).toLocaleString('en-US');
+        }
+    }
+</script>
+<script>
+    document.getElementById('income-date').addEventListener('change', function () {
+        const selectedDate = this.value;
+
+        // Format selected date
+        const formattedDate = new Date(selectedDate).toLocaleDateString('mn-MN', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        document.getElementById('selected-date').textContent = `Орлого (${formattedDate})`;
+
+        // Fetch income data from the backend
+        fetch(`/income/total?date=${selectedDate}`)
+            .then(response => response.json())
+            .then(data => {
+                const totalIncome = data.totalIncome || 0;
+
+                // Update income display
+                document.getElementById('total-income').textContent = `${totalIncome}₮`;
+
+                // Update progress bar (Assume target income is 100,000₮ for demonstration)
+                const targetIncome = 100000;
+                const percentage = Math.min((totalIncome / targetIncome) * 100, 100);
+                document.getElementById('progress-bar').style.width = `${percentage}%`;
+                document.getElementById('progress-percentage').textContent = `${Math.round(percentage)}%`;
+            })
+            .catch(error => console.error('Error fetching income data:', error));
+    });
+</script>
+<script>
+document.getElementById('income-date').addEventListener('change', function () {
+    const selectedDate = this.value;
+
+    // Fetch income data for the selected date
+    fetch(`/income/date?date=${selectedDate}`)
+        .then(response => response.json())
+        .then(data => {
+            // Update total income display
+            const totalIncome = data.totalIncome || 0;
+            document.getElementById('total-income').textContent = `${totalIncome}₮`;
+
+            // Update progress bar (example target of 100,000₮)
+            const targetIncome = 100000;
+            const percentage = Math.min((totalIncome / targetIncome) * 100, 100);
+            document.getElementById('progress-bar').style.width = `${percentage}%`;
+            document.getElementById('progress-percentage').textContent = `${Math.round(percentage)}%`;
+        })
+        .catch(error => console.error('Error fetching income data:', error));
+});
+</script> --}}

@@ -1,14 +1,16 @@
 <?php
 
-
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Message;
 
-class MessageController extends Controller
+class UserMessageController extends Controller
 {
+    /**
+     * Store a new message.
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -22,5 +24,3 @@ class MessageController extends Controller
         return redirect()->back()->with('success', 'Message sent successfully.');
     }
 }
-
-

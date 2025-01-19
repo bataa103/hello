@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Enum\IncomeType;
+use Illuminate\Http\JsonResponse;
+
+
+
 
 
 class IncomeController extends Controller
@@ -160,36 +164,48 @@ class IncomeController extends Controller
         fclose($file);
     }
     public function type()
-    {
-        $incomeData = Income::selectRaw('incomeType, SUM(amount) as total_amount')
-            ->groupBy('incomeType')
-            ->get()
-            ->map(function ($income) {
-                return [
-                    'type' => $income->incomeType->value, // Enum value (e.g., "Salary", "Business")
-                    'total_amount' => $income->total_amount,
-                ];
-            });
-
-        // Calculate the total income for percentage calculations
-        $totalIncome = $incomeData->sum('total_amount');
-
-        // Prepare data for the charts
-        $pieChartData = $incomeData->map(function ($income) use ($totalIncome) {
+{
+    $incomeData = Income::selectRaw('incomeType, SUM(amount) as total_amount')
+        ->groupBy('incomeType')
+        ->get()
+        ->map(function ($income) {
             return [
-                'type' => $income['type'],
-                'percentage' => ($income['total_amount'] / $totalIncome) * 100,
+                'type' => $income->incomeType, // Assuming `incomeType` is a string, not an enum
+                'total_amount' => $income->total_amount,
             ];
         });
 
-        $barChartData = $incomeData;
+    // Calculate the total income for percentage calculations
+    $totalIncome = $incomeData->sum('total_amount');
 
-        return view('user.incomeType.index', compact('pieChartData', 'barChartData'));
-    }
-    public function getIncomeByDate(Request $request)
+    // Prepare data for the charts
+    $pieChartData = $incomeData->map(function ($income) use ($totalIncome) {
+        return [
+            'type' => $income['type'],
+            'percentage' => ($income['total_amount'] / $totalIncome) * 100,
+        ];
+    });
+
+    $barChartData = $incomeData;
+
+    return view('user.incomeType.index', compact('pieChartData', 'barChartData'));
+}
+
+public function getIncomeByDate(Request $request): JsonResponse
 {
     $date = $request->input('date');
-    $totalIncome = Income::whereDate('date', $date)->sum('amount');
+
+    // Validate input
+    if (!$date) {
+        return response()->json(['error' => 'Date is required.'], 400);
+    }
+
+    // Calculate total income for the selected date
+    $totalIncome = Income::whereDate('date', $date)
+        ->whereHas('credit', function ($query) {
+            $query->where('user_id', Auth::id());
+        })
+        ->sum('amount');
 
     return response()->json([
         'date' => $date,
@@ -199,5 +215,11 @@ class IncomeController extends Controller
 
 
 
-
 }
+
+
+
+
+
+
+
