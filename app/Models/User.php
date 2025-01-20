@@ -22,7 +22,10 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
+        'role_id',
+        'plan_id',
     ];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -46,6 +49,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class, 'plan_id'); // 'plan_id' is the foreign key in users table
+    }
 
     public function role(){
         return $this->belongsTo(Role::class);
@@ -53,10 +60,12 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        return $this->role->name === "admin";
+        return $this->role && $this->role->name === 'admin';
+        // return $this->role->name === "admin";
     }
     public function isUser()
     {
-        return $this->role->name === "user";
+        return $this->role && $this->role->name === 'user';
+        // return $this->role->name === "user";
     }
 }

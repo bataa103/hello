@@ -12,7 +12,7 @@
                     <!-- Мөр нэмэх товч -->
                     <div class="d-flex justify-content-end mb-3">
                         <button class="btn btn-primary btn-round" data-bs-toggle="modal" data-bs-target="#addRowModal">
-                            <i class="fa fa-plus"></i> Мөр нэмэх
+                            <i class="fa fa-plus"></i> Данс нэмэх
                         </button>
                     </div>
 
@@ -24,13 +24,13 @@
                                 <div class="modal-header border-0">
                                     <h5 class="modal-title">
                                         <span class="fw-mediumbold">Шинэ</span>
-                                        <span class="fw-light">Мөр</span>
+                                        <span class="fw-light">Данс</span>
                                     </h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <p class="small">Энэхүү формоор шинэ мөр нэмнэ үү. Бүх шаардлагатай талбаруудыг бөглөнө
+                                    <p class="small">Энэхүү формоор шинэ данс нэмнэ үү. Бүх шаардлагатай талбаруудыг бөглөнө
                                         үү.</p>
                                     <form enctype="multipart/form-data" action="{{ route('user.credit.store') }}"
                                         method="POST">
@@ -55,14 +55,7 @@
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                        <div class="form-group">
-                                            <label for="balance">Дансны үлдэгдэл</label>
-                                            <input type="number" name="balance" class="form-control" id="balance"
-                                                required>
-                                            @error('balance')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
+
                                         <div class="form-group">
                                             <label for="thumbnail">Зураг</label>
                                             <input type="file" name="thumbnail" id="thumbnail" class="form-control">
@@ -89,7 +82,6 @@
                                     <th>Зураг</th>
                                     <th>Банкны нэр</th>
                                     <th>Дансны дугаар</th>
-                                    <th>Дансны үлдэгдэл</th>
                                     <th>Үйлдэл</th>
                                 </tr>
                             </thead>
@@ -115,7 +107,6 @@
                                             {{ $bankName }}
                                         </td>
                                         <td>{{ $credit->IBAN }}</td>
-                                        <td>{{ $credit->balance }}</td>
                                         <td class="editDelete">
                                             <div class="d-flex justify-between">
                                                 <!-- Edit Button -->
@@ -179,14 +170,6 @@
                                                             <input type="number" name="IBAN" class="form-control"
                                                                 id="IBAN" value="{{ $credit->IBAN }}" required>
                                                             @error('IBAN')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="balance">Дансны үлдэгдэл</label>
-                                                            <input type="number" name="balance" class="form-control"
-                                                                id="balance" value="{{ $credit->balance }}" required>
-                                                            @error('balance')
                                                                 <span class="text-danger">{{ $message }}</span>
                                                             @enderror
                                                         </div>

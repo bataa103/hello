@@ -12,6 +12,7 @@ class Expense extends Model
         'type',
         'amount',
         'credit_id',
+        'date',
         'description',
         'user_id',
     ];

@@ -16,40 +16,61 @@
     </head>
 
 
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen relative overflow-hidden">
-            <!-- Background Video -->
-            <video autoplay muted loop class="absolute inset-0 w-full h-full object-cover">
-                <source src="{{ asset('haha/2.mp4') }}" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
+    <body class="font-sans bg-gradient-to-r from-[#1D3557] to-[#FFD700] overflow-hidden relative">
+        <!-- Tugrik Rain Animation -->
+        <div class="absolute inset-0 pointer-events-none" id="rain-container"></div>
 
-            <!-- Dark Overlay for better readability -->
-            <div class="absolute inset-0 bg-black opacity-50"></div>
-
-            <!-- Content: Welcome Text + Login Form -->
-            <div class="absolute inset-0 flex items-center justify-center">
-
-                <div class="w-2/3 h-2/3 flex flex-row bg-gray-400 bg-opacity-10  backdrop-blur-md shadow-lg rounded-lg overflow-hidden">
-                    <!-- Left Side: Welcome Text -->
-                    <div class="w-1/2 flex items-center justify-center bg-gray-300 bg-opacity-80">
-                        <h1 class="text-4xl font-bold text-gray-700">Welcome to Personal Budget</h1>
-                    </div>
-
-                    <!-- Right Side: Login Form -->
-                    <div class="w-1/2 flex items-center justify-center">
-                        <div class="w-full max-w-md px-8 py-6">
-                            <div class="text-center mb-6">
-                                <h2 class="text-2xl font-bold text-gray-800">Login</h2>
-                            </div>
-                            <!-- Dynamic Content: Login Form -->
-                            {{ $slot }}
-                        </div>
-                    </div>
-                </div>
+        <div class="min-h-screen flex items-center justify-center">
+            <!-- Content: Login Form -->
+            <div class="relative w-full max-w-md px-8 py-6 bg-white bg-opacity-10 backdrop-blur-lg shadow-lg rounded-lg">
+                <!-- Dynamic Content: Login Form -->
+                {{ $slot }}
             </div>
+            
         </div>
+
+        <script>
+            // Tugrik Rain Animation
+            const rainContainer = document.getElementById('rain-container');
+            const totalTugriks = 50; // Number of Tugrik signs
+
+            for (let i = 0; i < totalTugriks; i++) {
+                const tugrik = document.createElement('div');
+                tugrik.className = 'absolute text-[#FFD700] text-2xl animate-fall';
+                tugrik.textContent = '₮';
+
+                // Randomize position and animation duration
+                tugrik.style.left = Math.random() * 100 + 'vw';
+                tugrik.style.animationDuration = Math.random() * 3 + 3 + 's';
+                tugrik.style.animationDelay = Math.random() * 5 + 's';
+
+                rainContainer.appendChild(tugrik);
+            }
+        </script>
+
+        <style>
+            /* Tugrik Rain */
+            @keyframes fall {
+                0% {
+                    transform: translateY(0) rotate(0deg);
+                    opacity: 1;
+                }
+
+                100% {
+                    transform: translateY(100vh) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+
+            .animate-fall {
+                animation: fall 5s linear infinite;
+            }
+        </style>
     </body>
+
+
+
+
 
 
 

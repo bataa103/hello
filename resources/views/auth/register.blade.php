@@ -36,10 +36,10 @@
 
                 <!-- Actions -->
                 <div class="flex items-center justify-between mt-6">
-                    <a class="text-sm text-indigo-600 hover:text-indigo-800 underline focus:outline-none focus:ring-2 focus:ring-indigo-500" href="{{ route('login') }}">
+                    <a class="text-sm text-blue-900 hover:text-blue-900 underline focus:outline-none focus:ring-2 focus:ring-blue-900" href="{{ route('login') }}">
                         {{ __('Өмнө нь бүртгүүлсэн үү?') }}
                     </a>
-                    <x-primary-button class="px-6 py-2 text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 rounded-lg">
+                    <x-primary-button class="px-6 py-2 text-white bg-blue-900 hover:bg-blue-900 focus:ring-2 focus:ring-blue-900 rounded-lg">
                         {{ __('Бүртгүүлэх') }}
                     </x-primary-button>
                 </div>

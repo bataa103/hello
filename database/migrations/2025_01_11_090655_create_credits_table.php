@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('bank');
             $table->string('IBAN');
-            $table->string('balance');
             $table->string('thumbnail');
             $table->foreignId('user_id')->nullable()->constrained('users')->ondelete('cascade');
             $table->timestamps();

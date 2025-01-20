@@ -7,6 +7,7 @@ use App\Models\Expense;
 use App\Models\Credit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Enum\ExpenseType;
 
 class ExpenseController extends Controller
 {
@@ -31,6 +32,7 @@ class ExpenseController extends Controller
             'type' => 'required|string|max:255',
             'amount' => 'required|numeric|min:0',
             'description' => 'nullable|string',
+            'date' => 'required|date',
             'credit_id' => 'required|exists:credits,id',
         ]);
 
@@ -43,6 +45,7 @@ class ExpenseController extends Controller
             'type' => $validatedData['type'],
             'amount' => $validatedData['amount'],
             'description' => $validatedData['description'],
+            'date' =>$validatedData['date'],
             'credit_id' => $credit->id,
             'user_id' => $userId,
         ]);
@@ -63,6 +66,7 @@ class ExpenseController extends Controller
             'type' => 'required|string|max:255',
             'amount' => 'required|numeric|min:0',
             'description' => 'nullable|string',
+            'date' => 'required|date',
             'credit_id' => 'required|exists:credits,id',
         ]);
 
@@ -75,6 +79,7 @@ class ExpenseController extends Controller
             'type' => $validatedData['type'],
             'amount' => $validatedData['amount'],
             'description' => $validatedData['description'],
+            'date' =>$validatedData['date'],
             'credit_id' => $credit->id,
         ]);
 
@@ -94,4 +99,89 @@ class ExpenseController extends Controller
 
         return redirect()->route('user.expense.index')->with('success', 'Expense deleted successfully!');
     }
+    // New Method: Import CSV
+    public function importCsv(Request $request)
+    {
+        dd($request->all());
+        $request->validate([
+            'csv_file' => 'required|file|mimes:csv,txt|max:2048',
+        ]);
+
+        $filePath = $request->file('csv_file')->getPathname();
+
+        try {
+            // Parse and import the CSV file
+            $this->importTransactionsFromCsv($filePath);
+
+            return redirect()->route('user.expense.index')->with('success', 'Transactions imported successfully!');
+        } catch (\Exception $e) {
+            return redirect()->route('user.expense.index')->with('error', 'Error importing transactions: ' . $e->getMessage());
+        }
+    }
+
+    // Helper function to process the CSV file
+    private function importTransactionsFromCsv($filePath)
+    {
+        $file = fopen($filePath, 'r');
+        $header = fgetcsv($file);
+
+        while ($row = fgetcsv($file)) {
+            $data = array_combine($header, $row);
+
+            $credit = Credit::where('IBAN', $data['IBAN'])->where('user_id', Auth::id())->first();
+
+            if ($credit) {
+                if (!empty($data['Кредит гүйлгээ'])) {
+                    Income::create([
+                        'incomeType' => $data['Төрөл'] ?? 'General',
+                        'amount' => (float) str_replace(',', '', $data['Кредит гүйлгээ']),
+                        'description' => $data['Гүйлгээний утга'] ?? '',
+                        'date'=> $data['Гүйлгээний огноо']?? '',
+                        'credit_id' => $credit->id,
+                        'user_id' => Auth::id(),
+                    ]);
+                }
+
+                if (!empty($data['Дебит гүйлгээ'])) {
+                    Expense::create([
+                        'expenseType' => $data['Төрөл'] ?? 'General',
+                        'amount' => (float) str_replace(',', '', $data['Дебит гүйлгээ']),
+                        'description' => $data['Гүйлгээний утга'] ?? '',
+                        'date'=> $data['Гүйлгээний огноо']?? '',
+                        'credit_id' => $credit->id,
+                        'user_id' => Auth::id(),
+                    ]);
+                }
+            }
+        }
+
+        fclose($file);
+    }
+    public function type()
+    {
+        $expenseData = Expense::selectRaw('type, SUM(amount) as total_amount')
+            ->groupBy('type')
+            ->get()
+            ->map(function ($expense) {
+                return [
+                    'type' => $expense->type->value,
+                    'total_amount' => $expense->total_amount,
+                ];
+            });
+
+        $totalExpenses = $expenseData->sum('total_amount');
+
+        $pieChartData = $expenseData->map(function ($expense) use ($totalExpenses) {
+            return [
+                'type' => $expense['type'],
+                'percentage' => ($expense['total_amount'] / $totalExpenses) * 100,
+            ];
+        });
+
+        $barChartData = $expenseData;
+
+        return view('user.expenseType.index', compact('pieChartData', 'barChartData'));
+    }
+
+
 }

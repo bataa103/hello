@@ -7,6 +7,13 @@ use App\Models\Income;
 use App\Models\Credit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Enum\IncomeType;
+use Illuminate\Http\JsonResponse;
+
+
+
+
 
 class IncomeController extends Controller
 {
@@ -31,6 +38,7 @@ class IncomeController extends Controller
             'incomeType' => 'required|string|max:255',
             'amount' => 'required|numeric|min:0',
             'description' => 'nullable|string',
+            'date' => 'required|date',
             'credit_id' => 'required|exists:credits,id',
         ]);
 
@@ -43,6 +51,7 @@ class IncomeController extends Controller
             'incomeType' => $validatedData['incomeType'],
             'amount' => $validatedData['amount'],
             'description' => $validatedData['description'],
+            'date' =>$validatedData['date'],
             'credit_id' => $credit->id,
             'user_id' => $userId,
         ]);
@@ -63,6 +72,7 @@ class IncomeController extends Controller
             'incomeType' => 'required|string|max:255',
             'amount' => 'required|numeric|min:0',
             'description' => 'nullable|string',
+            'date' => 'required|date',
             'credit_id' => 'required|exists:credits,id',
         ]);
 
@@ -75,6 +85,7 @@ class IncomeController extends Controller
             'incomeType' => $validatedData['incomeType'],
             'amount' => $validatedData['amount'],
             'description' => $validatedData['description'],
+            'date' =>$validatedData['date'],
             'credit_id' => $credit->id,
         ]);
 
@@ -94,4 +105,121 @@ class IncomeController extends Controller
 
         return redirect()->route('user.income.index')->with('success', 'Income deleted successfully!');
     }
+
+
+    public function importCsv(Request $request)
+    {
+        $request->validate([
+            'csv_file' => 'required|file|mimes:csv,txt,xlsx|max:2048',
+        ]);
+
+        if (!file_exists($filePath)) {
+            return redirect()->back()->with('error', 'File not found at the temporary path.');
+        }
+
+        try {
+            $this->importTransactionsFromCsv($filePath);
+
+            return redirect()->route('user.income.index')->with('success', 'Transactions imported successfully!');
+        } catch (\Exception $e) {
+            return redirect()->route('user.income.index')->with('error', 'Error importing transactions: ' . $e->getMessage());
+        }
+    }
+
+    private function importTransactionsFromCsv($filePath)
+    {
+        $file = fopen($filePath, 'r');
+        $header = fgetcsv($file);
+
+        while ($row = fgetcsv($file)) {
+            $data = array_combine($header, $row);
+
+            $credit = Credit::where('IBAN', $data['IBAN'])->where('user_id', Auth::id())->first();
+
+            if ($credit) {
+                if (!empty($data['Кредит гүйлгээ'])) {
+                    Income::create([
+                        'incomeType' => $data['Төрөл'] ?? 'General',
+                        'amount' => (float) str_replace(',', '', $data['Кредит гүйлгээ']),
+                        'description' => $data['Гүйлгээний утга'] ?? '',
+                        'date'=> $data['Гүйлгээний огноо']?? '',
+                        'credit_id' => $credit->id,
+                        'user_id' => Auth::id(),
+                    ]);
+                }
+
+                if (!empty($data['Дебит гүйлгээ'])) {
+                    Expense::create([
+                        'expenseType' => $data['Төрөл'] ?? 'General',
+                        'amount' => (float) str_replace(',', '', $data['Дебит гүйлгээ']),
+                        'description' => $data['Гүйлгээний утга'] ?? '',
+                        'date'=> $data['Гүйлгээний огноо']?? '',
+                        'credit_id' => $credit->id,
+                        'user_id' => Auth::id(),
+                    ]);
+                }
+            }
+        }
+
+        fclose($file);
+    }
+    public function type()
+{
+    $incomeData = Income::selectRaw('incomeType, SUM(amount) as total_amount')
+        ->groupBy('incomeType')
+        ->get()
+        ->map(function ($income) {
+            return [
+                'type' => $income->incomeType, // Assuming `incomeType` is a string, not an enum
+                'total_amount' => $income->total_amount,
+            ];
+        });
+
+    // Calculate the total income for percentage calculations
+    $totalIncome = $incomeData->sum('total_amount');
+
+    // Prepare data for the charts
+    $pieChartData = $incomeData->map(function ($income) use ($totalIncome) {
+        return [
+            'type' => $income['type'],
+            'percentage' => ($income['total_amount'] / $totalIncome) * 100,
+        ];
+    });
+
+    $barChartData = $incomeData;
+
+    return view('user.incomeType.index', compact('pieChartData', 'barChartData'));
 }
+
+public function getIncomeByDate(Request $request): JsonResponse
+{
+    $date = $request->input('date');
+
+    // Validate input
+    if (!$date) {
+        return response()->json(['error' => 'Date is required.'], 400);
+    }
+
+    // Calculate total income for the selected date
+    $totalIncome = Income::whereDate('date', $date)
+        ->whereHas('credit', function ($query) {
+            $query->where('user_id', Auth::id());
+        })
+        ->sum('amount');
+
+    return response()->json([
+        'date' => $date,
+        'totalIncome' => $totalIncome,
+    ]);
+}
+
+
+
+}
+
+
+
+
+
+
+

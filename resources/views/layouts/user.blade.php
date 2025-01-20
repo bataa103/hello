@@ -9,8 +9,9 @@
     />
     <link rel="icon" href="assets/img/kaiadmin/favicon.ico" type="image/x-icon" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-
+    
     <script src="{{asset('admin/assets/js/plugin/webfont/webfont.min.js')}}"></script>
+
     <script>
       WebFont.load({
         google: { families: ["Public Sans:300,400,500,600,700"] },
@@ -32,8 +33,6 @@
     <link rel="stylesheet" href="{{asset('admin/assets/css/bootstrap.min.css')}}" />
     <link rel="stylesheet" href="{{asset('admin/assets/css/plugins.min.css')}}" />
     <link rel="stylesheet" href="{{asset('admin/assets/css/kaiadmin.min.css')}}" />
-    <link href="{{asset('admin/assets/styles.css')}}" rel="stylesheet" />
-    <link href="{{asset('admin/assets/prism.css')}}" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   </head>
   <body>
@@ -54,37 +53,8 @@
   <script src="{{asset('admin/assets/js/core/bootstrap.min.js')}}"></script>
   <script src="{{asset('admin/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')}}"></script>
   <script src="{{asset('admin/assets/js/plugin/datatables/datatables.min.js')}}"></script>
-  <script src="{{asset('admin/assets/js/kaiadmin.min.js')}}"></script>
-  <script src="{{asset('admin/assets/prism.js')}}"></script>
-  <script src="{{asset('admin/assets/prism-normalize-whitespace.min.js')}}"></script>
-  <script type="text/javascript">
-    // Optional
-    Prism.plugins.NormalizeWhitespace.setDefaults({
-      "remove-trailing": true,
-      "remove-indent": true,
-      "left-trim": true,
-      "right-trim": true,
-    });
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    // handle links with @href started with '#' only
-    $(document).on("click", 'a[href^="#"]', function (e) {
-      // target element id
-      var id = $(this).attr("href");
 
-      // target element
-      var $id = $(id);
-      if ($id.length === 0) {
-        return;
-      }
 
-      // prevent standard hash navigation (avoid blinking in IE)
-      e.preventDefault();
-
-      // top position relative to the document
-      var pos = $id.offset().top - 80;
-
-      // animated top scrolling
-      $("body, html").animate({ scrollTop: pos });
-    });
-  </script>
 </html>

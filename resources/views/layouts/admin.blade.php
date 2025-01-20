@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="{{asset('admin/assets/css/bootstrap.min.css')}}" />
     <link rel="stylesheet" href="{{asset('admin/assets/css/plugins.min.css')}}" />
     <link rel="stylesheet" href="{{asset('admin/assets/css/kaiadmin.min.css')}}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="{{asset('admin/assets/styles.css')}}" rel="stylesheet" />
     <link href="{{asset('admin/assets/prism.css')}}" rel="stylesheet" />
   </head>
@@ -85,5 +86,13 @@
       // animated top scrolling
       $("body, html").animate({ scrollTop: pos });
     });
+    document.querySelector('.toggle-sidebar').addEventListener('click', function () {
+  document.querySelector('.sidebar').classList.toggle('hidden'); // Hide/show sidebar
+});
+
+document.querySelector('.sidenav-toggler').addEventListener('click', function () {
+  document.querySelector('.sidebar').classList.toggle('collapsed'); // Collapse sidebar
+});
+
   </script>
 </html>

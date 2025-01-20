@@ -16,11 +16,13 @@ class Income extends Model
         'amount',
         'credit_id',
         'description',
+        'date',
         'user_id',
     ];
 
     protected $casts = [
         'incomeType' => IncomeType::class,
+        'date' => 'datetime'
     ];
 
     public function credit()

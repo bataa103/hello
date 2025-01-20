@@ -26,7 +26,6 @@ class CreditController extends Controller
             'bank' => 'required|string|max:255',
             'IBAN' => 'required|numeric',
             'thumbnail' => 'nullable|image|max:2048',
-            'balance' => 'required|numeric|min:0',
         ]);
 
 
@@ -50,7 +49,6 @@ class CreditController extends Controller
             'bank' => $validatedData['bank'],
             'IBAN' => $validatedData['IBAN'],
             'thumbnail' => $validatedData['thumbnail'],
-            'balance' => $validatedData['balance'],
             'user_id' => $userId,
         ]);
 
@@ -67,7 +65,6 @@ class CreditController extends Controller
         $validatedData = $request->validate([
             'bank' => 'required|string|max:255',
             'IBAN' => 'required|numeric|unique:credits,IBAN,' . $credit->id,
-            'balance' => 'required|numeric|min:0',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -102,4 +99,6 @@ class CreditController extends Controller
 
         return redirect()->route('user.credit.index')->with('success', 'Credit deleted successfully!');
     }
+
+
 }
