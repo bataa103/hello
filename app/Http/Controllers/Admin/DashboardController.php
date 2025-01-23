@@ -13,7 +13,7 @@ class DashboardController extends Controller
     {
         $users = User::all();
         $plans = Plan::all();
-        $messages = Message::all(); // Assuming you have a Message model
+        $messages = Message::all();
 
         return view('admin.dashboard', compact('users', 'plans', 'messages'));
     }

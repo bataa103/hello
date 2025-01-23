@@ -1,26 +1,29 @@
 <?php
 
-
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Message;
 
 class MessageController extends Controller
 {
-    public function store(Request $request)
+    public function index()
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255',
-            'message' => 'required|string',
-        ]);
+        // Fetch all messages
+        $messages = Message::latest()->get();
 
-        Message::create($validated);
+        // Return the admin messages view
+        return view('admin.messages.index', compact('messages'));
+    }
 
-        return redirect()->back()->with('success', 'Message sent successfully.');
+    public function show($id)
+    {
+        $message = Message::find($id);
+
+        if (!$message) {
+            return response()->json(['success' => false, 'message' => 'Message not found!'], 404);
+        }
+
+        return response()->json(['success' => true, 'message' => $message], 200);
     }
 }
-
-

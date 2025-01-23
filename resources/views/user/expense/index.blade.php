@@ -10,13 +10,22 @@
                 </div>
                 <div class="card-body">
                     <!-- Add Expense Button -->
-                    <div class="d-flex justify-content-end mb-3">
+                    {{-- <div class="d-flex justify-content-end mb-3">
                         <button class="btn btn-primary btn-round me-2" data-bs-toggle="modal" data-bs-target="#addRowModal">
                             <i class="fa fa-plus"></i>Зарлага нэмэх
                         </button>
-                        <button class="btn btn-secondary btn-round" data-bs-toggle="modal" data-bs-target="#uploadExcelModal">
-                            <i class="fa fa-file-excel"></i> Excel-ээр нэмэх
-                        </button>
+                        <form action="{{ route('income.import') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="file" name="file" required>
+                            <button type="submit">Import Income</button>
+                        </form>
+
+                        <form action="{{ route('expense.import') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="file" name="file" required>
+                            <button type="submit">Excel-ээр нэмэх</button>
+                        </form> --}}
+
                     </div>
 
                     <!-- Add Expense Modal -->
@@ -105,7 +114,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <p class="small">Энэхүү функц нь Excel файл ашиглан олон зарлагын мэдээллийг нэг дор нэмэх боломжийг олгоно.</p>
-                                    <form action="{{route('user.income.import.transactions')}}" method="POST" enctype="multipart/form-data">
+                                    {{-- <form action="{{route('user.income.import.transactions')}}" method="POST" enctype="multipart/form-data"> --}}
                                         @csrf
                                         <div class="form-group mb-3">
                                             <label for="excelFile">Excel файл</label>
@@ -123,7 +132,7 @@
                         </div>
                     </div>
 
-                    
+
 
                     <!-- Expenses Table -->
                     <div class="table-responsive">

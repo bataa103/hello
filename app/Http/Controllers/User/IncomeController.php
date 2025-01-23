@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Enum\IncomeType;
 use Illuminate\Http\JsonResponse;
+use App\Imports\IncomeImport;
+use Illuminate\Support\Facades\Storage;
+
 
 
 
@@ -107,62 +110,7 @@ class IncomeController extends Controller
     }
 
 
-    public function importCsv(Request $request)
-    {
-        $request->validate([
-            'csv_file' => 'required|file|mimes:csv,txt,xlsx|max:2048',
-        ]);
 
-        if (!file_exists($filePath)) {
-            return redirect()->back()->with('error', 'File not found at the temporary path.');
-        }
-
-        try {
-            $this->importTransactionsFromCsv($filePath);
-
-            return redirect()->route('user.income.index')->with('success', 'Transactions imported successfully!');
-        } catch (\Exception $e) {
-            return redirect()->route('user.income.index')->with('error', 'Error importing transactions: ' . $e->getMessage());
-        }
-    }
-
-    private function importTransactionsFromCsv($filePath)
-    {
-        $file = fopen($filePath, 'r');
-        $header = fgetcsv($file);
-
-        while ($row = fgetcsv($file)) {
-            $data = array_combine($header, $row);
-
-            $credit = Credit::where('IBAN', $data['IBAN'])->where('user_id', Auth::id())->first();
-
-            if ($credit) {
-                if (!empty($data['Кредит гүйлгээ'])) {
-                    Income::create([
-                        'incomeType' => $data['Төрөл'] ?? 'General',
-                        'amount' => (float) str_replace(',', '', $data['Кредит гүйлгээ']),
-                        'description' => $data['Гүйлгээний утга'] ?? '',
-                        'date'=> $data['Гүйлгээний огноо']?? '',
-                        'credit_id' => $credit->id,
-                        'user_id' => Auth::id(),
-                    ]);
-                }
-
-                if (!empty($data['Дебит гүйлгээ'])) {
-                    Expense::create([
-                        'expenseType' => $data['Төрөл'] ?? 'General',
-                        'amount' => (float) str_replace(',', '', $data['Дебит гүйлгээ']),
-                        'description' => $data['Гүйлгээний утга'] ?? '',
-                        'date'=> $data['Гүйлгээний огноо']?? '',
-                        'credit_id' => $credit->id,
-                        'user_id' => Auth::id(),
-                    ]);
-                }
-            }
-        }
-
-        fclose($file);
-    }
     public function type()
 {
     $incomeData = Income::selectRaw('incomeType, SUM(amount) as total_amount')
@@ -191,28 +139,54 @@ class IncomeController extends Controller
     return view('user.incomeType.index', compact('pieChartData', 'barChartData'));
 }
 
-public function getIncomeByDate(Request $request): JsonResponse
-{
-    $date = $request->input('date');
+// public function getIncomeByDate(Request $request): JsonResponse
+// {
+//     $date = $request->input('date');
 
-    // Validate input
-    if (!$date) {
-        return response()->json(['error' => 'Date is required.'], 400);
+//     // Validate input
+//     if (!$date) {
+//         return response()->json(['error' => 'Date is required.'], 400);
+//     }
+
+//     // Calculate total income for the selected date
+//     $totalIncome = Income::whereDate('date', $date)
+//         ->whereHas('credit', function ($query) {
+//             $query->where('user_id', Auth::id());
+//         })
+//         ->sum('amount');
+
+//     return response()->json([
+//         'date' => $date,
+//         'totalIncome' => $totalIncome,
+//     ]);
+// }
+
+    // public function import()
+    // {
+    //     // Ensure the file exists in storage/app
+    //     $filePath = storage_path('app/users.xlsx');
+
+    //     if (!file_exists($filePath)) {
+    //         return redirect('/')->with('error', 'File not found!');
+    //     }
+
+    //     // Perform the import
+    //     Excel::import(new IncomeImport, $filePath);
+
+    //     return redirect('/')->with('success', 'Income data imported successfully!');
+    // }
+    public function import(Request $request)
+    {
+        // Validate the uploaded file
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv|max:2048', // Ensure it's an Excel or CSV file
+        ]);
+
+        // Perform the import
+        Excel::import(new IncomeImport, $request->file('file'));
+
+        return redirect()->route('income.index')->with('success', 'Incomes imported successfully!');
     }
-
-    // Calculate total income for the selected date
-    $totalIncome = Income::whereDate('date', $date)
-        ->whereHas('credit', function ($query) {
-            $query->where('user_id', Auth::id());
-        })
-        ->sum('amount');
-
-    return response()->json([
-        'date' => $date,
-        'totalIncome' => $totalIncome,
-    ]);
-}
-
 
 
 }

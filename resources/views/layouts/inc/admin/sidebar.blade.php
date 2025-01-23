@@ -29,96 +29,45 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-
-                <li class="nav-section">
-                    <span class="sidebar-mini-icon">
-                        <i class="fa fa-ellipsis-h"></i>
-                    </span>
-                    <h4 class="text-section">Management</h4>
+                <li class="nav-item">
+                    <form action="{{ url('/') }}" method="GET" class="m-0">
+                        <button type="submit" class="btn btn-light d-flex align-items-center">
+                            <i class="bi bi-house-door-fill text-primary me-2"></i>
+                            <span>Welcome Page</span>
+                        </button>
+                    </form>
                 </li>
 
-                <!-- User Control -->
                 <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#user-control" class="collapsed" aria-expanded="false">
-                        <i class="fas fa-users"></i>
-                        <p>User Control</p>
-                        <span class="caret"></span>
+                    <a href="{{ route('admin.users.index') }}">
+                        <i class="bi bi-person"></i>
+                        <span class="sub-item">Хэрэглэгчид</span>
                     </a>
-                    <div class="collapse" id="user-control">
-                        <ul class="nav nav-collapse">
-                            <li>
-                                <a href="{{ route('admin.users.index') }}">
-                                    <span class="sub-item">View All Users</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('admin.users.create') }}">
-                                    <span class="sub-item">Add New User</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
                 </li>
 
                 <!-- User Plan Management -->
                 <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#user-plan-management" class="collapsed" aria-expanded="false">
-                        <i class="fas fa-list-alt"></i>
-                        <p>User Plan Management</p>
-                        <span class="caret"></span>
+                    <a href="{{ route('admin.plan.index') }}">
+                        <i class="bi bi-person-vcard-fill"></i>
+                        <span class="sub-item">Хэрэглэгдийн төлөвлөгөө</span>
                     </a>
-                    <div class="collapse" id="user-plan-management">
-                        <ul class="nav nav-collapse">
-                            <li>
-                                <a href="{{ route('admin.plan.index') }}">
-                                    <span class="sub-item">View All Plans</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
                 </li>
                 <!-- Message Management -->
                 <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#message-management" class="collapsed" aria-expanded="false">
-                        <i class="fas fa-envelope"></i>
-                        <p>Message Management</p>
-                        <span class="caret"></span>
-                    </a>
-                    <div class="collapse" id="message-management">
-                        <ul class="nav nav-collapse">
-                            <li>
-                                {{-- <a href="{{ route('admin.messages.index') }}"> --}}
-                                    <span class="sub-item">View All Messages</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-
-
-
-                <!-- Additional Sections -->
-                {{-- <li class="nav-item">
-                    <a href="{{ route('admin.reports') }}">
-                        <i class="fas fa-chart-bar"></i>
-                        <p>Reports & Analytics</p>
+                    <a href="{{ route('admin.messages.index') }}">
+                        <i class="bi bi-envelope"></i>
+                        <span class="sub-item">Захидал</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.income.index') }}">
-                        <i class="fas fa-dollar-sign"></i>
-                        <p>Income Management</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.savings') }}">
-                        <i class="fas fa-piggy-bank"></i>
-                        <p>Savings Tracker</p>
-                    </a>
-                </li> --}}
+
             </ul>
         </div>
-        <div class="sidebar-footer position-absolute bottom-5 w-100">
+        <div id="hidden-div" style="display: none;">
+            <p>This is an invisible div.</p>
+        </div>
+
+
+        <div class="sidebar-footer position-absolute bottom-5 w-100" style="margin-top: 200px;">
             <div
                 class="user-info d-flex justify-content-between align-items-center bg-light p-3 rounded shadow-sm w-100">
                 <!-- User Icon and Name -->

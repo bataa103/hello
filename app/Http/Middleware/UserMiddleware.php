@@ -12,7 +12,6 @@ class UserMiddleware
 
     public function handle(Request $request, Closure $next)
     {
-             // Check if the user is authenticated and an admin
              if (Auth::check()) {
                 if(Auth::user()->isUser()){
                     return $next($request);
@@ -22,7 +21,6 @@ class UserMiddleware
                 return redirect('/')->with('status','Ta User bish baina.');
             }
 
-            // Redirect or abort if the user is not an admin
             return redirect('/')->with('error', 'Access denied. Admins only.');
     }
 }

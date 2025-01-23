@@ -3,7 +3,7 @@
 @section('content1')
     <div class="content content-documentation mt-20">
         <div class="container-fluid mt-4">
-            <div class="card card-documentation">
+            <div class="card card-documentation">Excel-ээр нэмэх
                 <div class="card-header">
                     <h4> Орлогын мэдээлэл</h4>
                     <p>Та энд өөрийн орлогын мэдээллүүддээ удирдах боломжтой.</p>
@@ -14,10 +14,16 @@
                         <button class="btn btn-primary btn-round me-2" data-bs-toggle="modal" data-bs-target="#addRowModal">
                             <i class="fa fa-plus"></i> Орлого нэмэх
                         </button>
-                        <button class="btn btn-secondary btn-round" data-bs-toggle="modal"
-                            data-bs-target="#uploadExcelModal">
-                            <i class="fa fa-file-excel"></i> Excel-ээр нэмэх
-                        </button>
+                        {{-- <form action="{{ route('income.import') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="form-group">
+                                <label for="file">Upload File</label>
+                                <input type="file" name="file" id="file" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Import Incomes</button>
+                        </form> --}}
+
+
                     </div>
 
                     <!-- Орлого нэмэх Modal -->
@@ -48,7 +54,7 @@
                                                 @endforeach
                                             </select>
                                             @error('type')
-                                                <span class="text-danger">{{ $message }}</span>
+                                                <span class="text-danger">{{ $message }}</span>we
                                             @enderror
                                         </div>
 
@@ -100,7 +106,7 @@
                     </div>
 
                     <!-- Excel Upload Modal -->
-                    <div class="modal fade" id="uploadExcelModal" tabindex="-1" role="dialog"
+                    {{-- <div class="modal fade" id="uploadExcelModal" tabindex="-1" role="dialog"
                         aria-labelledby="uploadExcelModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -112,40 +118,28 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
-                                <div class="modal-body">
-                                    <p class="small">Энэхүү функц нь Excel файл ашиглан олон орлогын мэдээллийг нэг дор
-                                        нэмэх боломжийг олгоно.</p>
-                                    <form action="{{ route('user.income.import.transactions') }}" method="POST"
-                                        enctype="multipart/form-data">
-                                        @csrf
-                                        <div class="form-group">
-                                            <label for="csv_file">Excel файл</label>
-                                            <input type="file" name="csv_file" id="csv_file" class="form-control"
-                                                accept=".csv,.xlsx,.xls" required>
-                                            @error('csv_file')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Импорт</button>
-                                        <button type="button" class="btn btn-danger"
-                                            data-bs-dismiss="modal">Болих</button>
-                                    </form>
-                                </div>
+                                <form action="{{ route('income.import') }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <input type="file" name="file" required>
+                                    <button type="submit">Import Income</button>
+                                </form>
+
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="mt-4">
                         <!-- Date Picker and Apply Button -->
-                        <div class="d-flex align-items-center">
+                        {{-- <div class="d-flex align-items-center">
                             <input type="date" id="income-date" class="form-control w-auto me-2">
                             <button id="apply-date" class="btn btn-primary">Apply</button>
-                        </div>
+                        </div> --}}
 
                         <!-- Display Selected Date and Total Income -->
-                        <h5 id="selected-date" class="font-bold mt-3">Selected Date:</h5>
+                        {{-- <h5 id="selected-date" class="font-bold mt-3">Selected Date:</h5>
                         <h3 id="total-income" class="text-blue-600 font-bold"></h3>
-                    </div>
+                        <input type="text" id="total-income" class="form-control text-blue-600 font-bold mt-2" readonly>
+                    </div> --}}
 
                     <!-- Incomes Table -->
                     <div class="table-responsive">
@@ -233,8 +227,8 @@
                                                             <textarea name="description" class="form-control" rows="3">{{ $item->description }}</textarea>
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="data">Гүйлгээний огноо</label>
-                                                            <textarea name="date" class="form-control" rows="3">{{ $item->description }}</textarea>
+                                                            <label for="date">Гүйлгээний огноо</label>
+                                                                <input type="date" name="date" id="date" class="form-control" value="{{ $item->date }}" required>
                                                         </div>
 
                                                         <div class="form-group">
@@ -269,114 +263,124 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
-@endsection
+    @endsection
 
-@section('scripts')
-
-
-
-<script>
-document.getElementById('apply-date').addEventListener('click', function () {
-    const selectedDate = document.getElementById('income-date').value;
-
-    if (!selectedDate) {
-        alert('Please select a date!');
-        return;
-    }
-
-    fetch(`/income/date?date=${selectedDate}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                console.error(data.error);
-                return;
-            }
-
-            // Format the total income
-            const totalIncome = data.totalIncome || 0;
-            const formattedIncome = new Intl.NumberFormat('mn-MN').format(totalIncome);
-
-            // Update total income and selected date
-            document.getElementById('total-income').textContent = `${formattedIncome}₮`;
-
-            const formattedDate = new Date(selectedDate).toLocaleDateString('mn-MN', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-            });
-            document.getElementById('selected-date').textContent = `Selected Date: ${formattedDate}`;
-        })
-        .catch(error => {
-            console.error('Error fetching income data:', error);
-        });
-});
-
-// sss
-    document.getElementById('income-date').addEventListener('change', function () {
-    const selectedDate = this.value;
-
-    fetch(`/income/date?date=${selectedDate}`)
-        .then(response => response.json())
-        .then(data => {
-            const totalIncome = data.totalIncome || 0;
-
-            // Update chart
-            incomeChart.data.datasets[0].data = [totalIncome];
-            incomeChart.update();
-        })
-        .catch(error => {
-            console.error('Error updating chart:', error);
-        });
-});
+    @section('scripts')
 
 
-</script>
+
+    <script>
+    // document.getElementById("apply-date").addEventListener("click", () => {
+    //     const selectedDate = document.getElementById("income-date").value;
+
+    //     if (!selectedDate) {
+    //         alert("Please select a date.");
+    //         return;
+    //     }
+
+    //     const incomeData = {
+    //         "2025-01-01": 1500,
+    //         "2025-01-02": 2000,
+    //         "2025-01-03": 2500
+    //     };
+
+    //     const totalIncome = incomeData[selectedDate] || 0;
+    //     const formattedIncome = totalIncome.toLocaleString('en-US');
+
+    //     document.getElementById("selected-date").innerText = `Selected Date: ${selectedDate}`;
+    //     document.getElementById("total-income").value = formattedIncome;
+    // });
+
+    //
 
 
-@endsection
-{{-- <script>
-    $(document).ready(function() {
-        $('#incomesTable').DataTable({
-            language: {
-                url: "//cdn.datatables.net/plug-ins/1.11.3/i18n/mn.json"
-            }
-        });
-    });
-</script>
-<script>
-    function formatNumberNoDecimals(input) {
-        // Remove any existing commas
-        let value = input.value.replace(/,/g, '');
-
-        // Ensure it's a valid number
-        if (!isNaN(value) && value !== '') {
-            // Format the number with commas, no decimals
-            input.value = parseInt(value, 10).toLocaleString('en-US');
-        }
-    }
-</script>
-<script>
-    document.getElementById('income-date').addEventListener('change', function () {
+    // sss
+        document.getElementById('income-date').addEventListener('change', function () {
         const selectedDate = this.value;
 
-        // Format selected date
-        const formattedDate = new Date(selectedDate).toLocaleDateString('mn-MN', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-        document.getElementById('selected-date').textContent = `Орлого (${formattedDate})`;
-
-        // Fetch income data from the backend
-        fetch(`/income/total?date=${selectedDate}`)
+        fetch(`/income/date?date=${selectedDate}`)
             .then(response => response.json())
             .then(data => {
                 const totalIncome = data.totalIncome || 0;
 
-                // Update income display
+                // Update chart
+                incomeChart.data.datasets[0].data = [totalIncome];
+                incomeChart.update();
+            })
+            .catch(error => {
+                console.error('Error updating chart:', error);
+            });
+    });
+
+
+    </script>
+
+
+    @endsection
+    <script>
+        $(document).ready(function() {
+            $('#incomesTable').DataTable({
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.11.3/i18n/mn.json"
+                }
+            });
+        });
+    </script>
+    <script>
+        function formatNumberNoDecimals(input) {
+            // Remove any existing commas
+            let value = input.value.replace(/,/g, '');
+
+            // Ensure it's a valid number
+            if (!isNaN(value) && value !== '') {
+                // Format the number with commas, no decimals
+                input.value = parseInt(value, 10).toLocaleString('en-US');
+            }
+        }
+    </script>
+    <script>
+        document.getElementById('income-date').addEventListener('change', function () {
+            const selectedDate = this.value;
+
+            // Format selected date
+            const formattedDate = new Date(selectedDate).toLocaleDateString('mn-MN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            document.getElementById('selected-date').textContent = `Орлого (${formattedDate})`;
+
+            // Fetch income data from the backend
+            fetch(`/income/total?date=${selectedDate}`)
+                .then(response => response.json())
+                .then(data => {
+                    const totalIncome = data.totalIncome || 0;
+
+                    // Update income display
+                    document.getElementById('total-income').textContent = `${totalIncome}₮`;
+
+                    // Update progress bar (Assume target income is 100,000₮ for demonstration)
+                    const targetIncome = 100000;
+                    const percentage = Math.min((totalIncome / targetIncome) * 100, 100);
+                    document.getElementById('progress-bar').style.width = `${percentage}%`;
+                    document.getElementById('progress-percentage').textContent = `${Math.round(percentage)}%`;
+                })
+                .catch(error => console.error('Error fetching income data:', error));
+        });
+    </script>
+    <script>
+    document.getElementById('income-date').addEventListener('change', function () {
+        const selectedDate = this.value;
+
+        // Fetch income data for the selected date
+        fetch(`/income/date?date=${selectedDate}`)
+            .then(response => response.json())
+            .then(data => {
+                // Update total income display
+                const totalIncome = data.totalIncome || 0;
                 document.getElementById('total-income').textContent = `${totalIncome}₮`;
 
-                // Update progress bar (Assume target income is 100,000₮ for demonstration)
+                // Update progress bar (example target of 100,000₮)
                 const targetIncome = 100000;
                 const percentage = Math.min((totalIncome / targetIncome) * 100, 100);
                 document.getElementById('progress-bar').style.width = `${percentage}%`;
@@ -384,25 +388,4 @@ document.getElementById('apply-date').addEventListener('click', function () {
             })
             .catch(error => console.error('Error fetching income data:', error));
     });
-</script>
-<script>
-document.getElementById('income-date').addEventListener('change', function () {
-    const selectedDate = this.value;
-
-    // Fetch income data for the selected date
-    fetch(`/income/date?date=${selectedDate}`)
-        .then(response => response.json())
-        .then(data => {
-            // Update total income display
-            const totalIncome = data.totalIncome || 0;
-            document.getElementById('total-income').textContent = `${totalIncome}₮`;
-
-            // Update progress bar (example target of 100,000₮)
-            const targetIncome = 100000;
-            const percentage = Math.min((totalIncome / targetIncome) * 100, 100);
-            document.getElementById('progress-bar').style.width = `${percentage}%`;
-            document.getElementById('progress-percentage').textContent = `${Math.round(percentage)}%`;
-        })
-        .catch(error => console.error('Error fetching income data:', error));
-});
-</script> --}}
+    </script>

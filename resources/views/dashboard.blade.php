@@ -14,44 +14,4 @@
             </div>
         </div>
     </div>
-    @extends('layouts.app') <!-- Extend your layout -->
-
-@section('content')
-<div class="container">
-    <div class="row">
-        <h1>User Dashboard</h1>
-    </div>
-
-    <div class="row">
-        <!-- Charts -->
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Pie Chart</div>
-                </div>
-                <div class="card-body">
-                    <div class="chart-container">
-                        <canvas id="pieChart" style="width: 50%; height: 50%"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-6">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-chart-bar me-1"></i>
-                    Bar Chart Example
-                </div>
-                <div class="card-body">
-                    <canvas id="myBarChart" width="100%" height="40"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-@endsection
-
-
 </x-app-layout>

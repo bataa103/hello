@@ -202,12 +202,9 @@
             </div>
         </div>
     </div>
+    return view('messages.index');
 @endsection
 
 @section('scripts')
-    <script>
-        $(document).ready(function() {
-            $('#add-row').DataTable();
-        });
-    </script>
+ 
 @endsection

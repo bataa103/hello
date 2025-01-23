@@ -31,19 +31,17 @@ class AuthenticatedSessionController extends Controller
        return $this->redirectToDashboard(Auth::user());
     }
 
-    public function redirectToDashboard($user):RedirectResponse
+    public function redirectToDashboard($user): RedirectResponse
     {
-
-        if ($user->isAdmin()){
-            return redirect('admin/dashboard');
-        }
-        elseif ($user->isUser()) {
+        if ($user->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        } elseif ($user->isUser()) {
             return redirect('user/dashboard');
-        }
-        else{
-            return redirect('dashboard');
+        } else {
+            return redirect('dashboard'); 
         }
     }
+
 
     /**
      * Destroy an authenticated session.

@@ -24,16 +24,10 @@
           <div class="sidebar-wrapper scrollbar scrollbar-inner">
               <div class="sidebar-content">
                   <ul class="nav nav-info">
-                      <li class="nav-item active">
+                      <li class="nav-item">
                           <a href="{{ route('user.dashboard') }}">
 
                               <p>Миний санхүү</p>
-                          </a>
-                      </li>
-                      <li class="nav-item">
-                          <a href="{{ route('user.credit.index') }}">
-                              <i class="bi bi-bank"></i>
-                              <p>Данс</p>
                           </a>
                       </li>
 
@@ -63,6 +57,19 @@
                               <p>Зарлагын төрөл</p>
                           </a>
                       </li>
+                      <li class="nav-item">
+                        {{-- <a href="{{ route('user.messages.type') }}"> --}}
+                            <i class="bi bi-receipt"></i>
+                            <p>Админтай харилцах</p>
+                        </a>
+                    </li>
+
+                      <li class="nav-item">
+                        <a href="{{ url('/') }}" class="btn btn-primary d-flex align-items-center justify-content-center mt-3" style="text-decoration: none;">
+                            <i class="bi bi-house-door-fill me-2"></i>
+                            <span>Welcome Page</span>
+                        </a>
+                    </li>
 
                   </ul>
               </div>

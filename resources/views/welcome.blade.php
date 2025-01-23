@@ -47,10 +47,10 @@ c
             <nav class="flex justify-end items-center space-x-4">
                 @if (Route::has('login'))
                     @auth
-                        @if (Auth::user()->role === 'admin')
-                            <a href="{{ url('/admin/dashboard') }}" class="text-[#FFD700] hover:text-[#FFC300]">Админы Самбар</a>
+                        @if (Auth::user()->role->name === 'admin')
+                            <a href="{{ route('admin.dashboard') }}" class="text-[#FFD700] hover:text-[#FFC300]">Админы Самбар</a>
                         @else
-                            <a href="{{ url('/user/dashboard') }}" class="text-[#FFD700] hover:text-[#FFC300]">Хэрэглэгчийн Самбар</a>
+                            <a href="{{ route('user.dashboard') }}" class="text-[#FFD700] hover:text-[#FFC300]">Хэрэглэгчийн Самбар</a>
                         @endif
                         <form method="POST" action="{{ route('logout') }}" class="inline">
                             @csrf
@@ -145,17 +145,18 @@ c
                 <div class="bg-white rounded-lg shadow-lg p-6 border-4 border-blue-500">
                     <h3 class="text-2xl font-bold text-gray-800 mb-4">Plus</h3>
                     <p class="text-gray-600 mb-6">Орлого зарлага бүртгэхэд тохиромжтой.</p>
-                    <div class="text-4xl font-bold text-gray-800 mb-4">5000₮</div>
-                    <p class="text-sm text-gray-500 mb-6">Сар бүр</p>
+                    <div class="text-4xl font-bold text-gray-800 mb-4">2025 он дуустал үнэгүй</div>
+                    <p class="text-sm text-gray-500 mb-6"></p>
                     <ul class="text-gray-600 mb-6 space-y-2">
                         <li>✔ Вэб аппликейшнд нэвтрэх</li>
                         <li>✔ Орлого болон зарлага хадгалах</li>
                         <li>✔ Санхүүгийн анализ</li>
                         <li>✖ Банкны холболт</li>
                     </ul>
-                    <button class="bg-blue-900 text-white px-6 py-2 rounded-lg hover:bg-blue-600">
-                        Түвшин ахиулах
-                    </button>
+                    <a href="{{ route('register') }}"
+                        class="bg-blue-900 text-white px-6 py-2 rounded-lg hover:bg-blue-600 text-center inline-block">
+                        Бүртгүүлэх
+                    </a>
                 </div>
 
                 <!-- Gold Plan -->
@@ -163,7 +164,7 @@ c
                     <h3 class="text-2xl font-bold text-gray-800 mb-4">Gold Тун удахгүй</h3>
                     <p class="text-gray-600 mb-6">Мэргэжлийн түвшин.</p>
                     <div class="text-4xl font-bold text-gray-800 mb-4">20000₮</div>
-                    <p class="text-sm text-gray-500 mb-6">Сар бүр</p>
+                    <p class="text-start text-gray-500 mb-6">Сар бүр</p>
                     <ul class="text-gray-600 mb-6 space-y-2">
                         <li>✔ Вэб аппликейшнд нэвтрэх</li>
                         <li>✔ Орлого болон зарлага хадгалах</li>
@@ -193,18 +194,51 @@ c
                 </p>
             </div>
 
-            <!-- Right Section -->
-            {{-- action="{{ route('messages.store') }}" method="POST" --}}
-            <form>
+            <!-- Right Section: Form -->
+            <form action="{{ route('user.messages.store') }}" method="POST" class="bg-[#1E3456] text-white p-6 rounded-lg shadow-md">
                 @csrf
-                <input type="text" name="name" placeholder="Name" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <textarea name="message" placeholder="Your message" required></textarea>
-                <button type="submit">Send Message</button>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Name Field -->
+                    <div class="mb-4">
+                        <label for="name" class="block text-sm font-medium mb-1">Name:</label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-black"
+                        >
+                    </div>
+                    <!-- Email Field -->
+                    <div class="mb-4">
+                        <label for="email" class="block text-sm font-medium mb-1">Email:</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-black"
+                        >
+                    </div>
+                </div>
+                <!-- Message Field -->
+                <div class="mb-4">
+                    <label for="message" class="block text-sm font-medium mb-1">Message:</label>
+                    <textarea
+                        id="message"
+                        name="message"
+                        required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 resize-none h-24 text-black"
+                    ></textarea>
+                </div>
+                <!-- Submit Button -->
+                <button
+                    type="submit"
+                    class="w-full bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                    Send Message
+                </button>
             </form>
-
-
-
 
 
             <!-- Social Media -->
@@ -224,6 +258,7 @@ c
             </div>
         </div>
     </footer>
+
 
 
 

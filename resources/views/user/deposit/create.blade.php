@@ -1,6 +1,6 @@
 @extends('layouts.user')
 
-@section('content')
+@section('admin')
 <h1>Add New Deposit</h1>
 
 <form action="{{ route('deposits.store') }}" method="POST">

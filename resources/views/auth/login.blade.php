@@ -43,12 +43,12 @@
                         {{ __('Нэвтрэх') }}
                     </x-primary-button>
                 </div>
-                {{-- <div class="flex justify-center mt-6">
+                <div class="flex justify-center mt-6">
                     <x-primary-button class="px-6 py-3 bg-center text-white bg-blue-900 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 rounded-lg">
                         <a href="{{ route('register') }}" class="text-white inline-block text-center">
                             {{ __('Бүртгүүлэх') }}
                         </a>
-                    </x-primary-button> --}}
+                    </x-primary-button>
                 </div>
 
             </form>

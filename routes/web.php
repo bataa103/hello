@@ -12,11 +12,13 @@ use App\Http\Controllers\Admin\PlanController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\UserMessageController;
+
 use App\Models\User;
 use App\Models\Plan;
 use App\Models\Message;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
-use App\Http\Controllers\User\DashboardController as UserDashboardController;
+
 
 
 
@@ -44,21 +46,22 @@ Route::middleware([AdminMiddleware::class])
     ->name('admin.')
     ->group(function () {
         // Admin dashboard route
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-        // User-plan management
-        Route::get('/plan', [PlanController::class, 'index'])->name('plan.index');
-        Route::post('/plan/save', [PlanController::class, 'savePlan'])->name('plan.save');
+        Route::controller(PlanController::class)->prefix('plan')->name('plan.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
+            Route::put('/{id}', 'update')->name('update');
+            Route::delete('/{id}', 'destroy')->name('destroy');
+        });
 
-        // Plan CRUD operations
-        Route::get('/plans', [PlanController::class, 'listPlans'])->name('plans.index');
-        Route::post('/plans', [PlanController::class, 'store'])->name('plans.store');
-        Route::get('/plans/{id}/edit', [PlanController::class, 'edit'])->name('plans.edit');
-        Route::put('/plans/{id}', [PlanController::class, 'update'])->name('plans.update');
-        Route::delete('/plans/{id}', [PlanController::class, 'destroy'])->name('plans.destroy');
 
-        // Message creation route
-        Route::post('/messages', [MessageController::class, 'store'])->name('messages.store');
+
+        // Admin Messages Route
+        Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
+
+
+
 
         // User management resource routes
         Route::resource('users', UserController::class)->except(['show']);
@@ -69,11 +72,10 @@ Route::middleware([AdminMiddleware::class])
 
 
 
-    Route::middleware(['auth'])
+Route::middleware(['auth', UserMiddleware::class])
     ->prefix('user')
     ->name('user.')
     ->group(function () {
-
         // User Dashboard Route
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -92,6 +94,7 @@ Route::middleware([AdminMiddleware::class])
             Route::put('/{id}', 'update')->name('update');
             Route::delete('/{id}', 'destroy')->name('destroy');
             Route::get('/type', 'type')->name('type'); // Income Type Chart
+            Route::post('/expense/import', [ExpenseController::class, 'import'])->name('expense.import');
         });
 
         // Income Routes
@@ -101,14 +104,17 @@ Route::middleware([AdminMiddleware::class])
             Route::put('/{id}', 'update')->name('update'); // Update income
             Route::delete('/{id}', 'destroy')->name('destroy'); // Delete income
             Route::get('/type', 'type')->name('type'); // Income Type Chart
-            Route::post('/import-transactions', 'importCsv')->name('import.transactions');
             Route::get('/income/total', [IncomeController::class, 'getIncomeByDate'])->name('income.total');
+            Route::post('/income/import', [IncomeController::class, 'import'])->name('income.import');
+            Route::post('/import', 'import')->name('import');
+
             // nemsen
             Route::get('/date', 'getIncomeByDate')->name('byDate');
 
         });
 
         Route::post('/messages', [UserMessageController::class, 'store'])->name('messages.store');
+        Route::get('/messages', [UserMessageController::class, 'index']);
     });
 
 

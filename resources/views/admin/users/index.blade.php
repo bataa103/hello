@@ -1,36 +1,47 @@
 @extends('layouts.admin')
 
-@section('content')
-<div class="container">
-    <h1>User Management</h1>
-    <a href="{{ route('admin.users.create') }}" class="btn btn-primary mb-3">Add New User</a>
+@section('admin')
+    <div class="content content-documentation mt-20">
+        <div class="container-fluid mt-4">
+            <div class="card card-documentation">
+                <div class="card-header">
+                    <h4>Хэрэглэгчид болон Планы удирдах</h4>
+                    <p>Энд таны үйлчилгээний планыг болон хэрэглэгчдийн мэдээллийг удирдах боломжтой.</p>
+                </div>
+                <div class="card-body">
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($users as $user)
-                <tr>
-                    <td>{{ $user->id }}</td>
-                    <td>{{ $user->name }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>
-                        <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                        <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
+                    <div class="table-responsive">
+                        <table id="users-table" class="display table table-striped table-hover" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($users as $user)
+                                    <tr>
+                                        <td>{{ $user->id }}</td>
+                                        <td>{{ $user->name }}</td>
+                                        <td>{{ $user->email }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+@endsection
+
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#users-table').DataTable();
+            $('#plans-table').DataTable();
+        });
+    </script>
 @endsection
