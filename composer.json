@@ -12,7 +12,11 @@
         "php": "^8.2",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
+<<<<<<< HEAD
+        "maatwebsite/excel": "*"
+=======
         "maatwebsite/excel": "^3.1"
+>>>>>>> origin
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
